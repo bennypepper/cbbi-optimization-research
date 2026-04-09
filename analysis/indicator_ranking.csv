@@ -1,0 +1,11 @@
+indicator,label,composite_score,best_lag_days,best_spearman_rho,best_p_value,kruskal_significant,n_significant_lags,selected
+trolololo,Trolololo (LogReg),0.6557,90,-0.4261,0.0,True,5,True
+cbbi_confidence,CBBI Confidence,0.5779,14,-0.2965,0.0,True,5,True
+woobull,Woobull NVT,0.5753,14,-0.2922,0.0,True,5,True
+puell_multiple,Puell Multiple,0.5722,14,-0.287,0.0,True,5,True
+two_year_ma_mult,2Y MA Multiplier,0.5606,14,-0.2677,0.0,True,5,True
+mvrv_zscore,MVRV Z-Score,0.5595,14,-0.2658,0.0,True,5,True
+reserve_risk,Reserve Risk,0.5586,14,-0.2643,0.0,True,5,True
+rupl,RUPL,0.5571,14,-0.2618,0.0,True,5,True
+pi_cycle,Pi Cycle Top,0.5492,14,-0.2487,0.0,True,2,True
+rhodl_ratio,RHODL Ratio,0.5082,14,-0.1803,0.0,True,5,True

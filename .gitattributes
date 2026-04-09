@@ -1,0 +1,26 @@
+# Normalize line endings to LF on checkout across all platforms
+* text=auto eol=lf
+
+# Python source files
+*.py text eol=lf
+
+# Markdown and text docs
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.csv text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+
+# Binary files — never modify line endings
+*.parquet binary
+*.xlsx binary
+*.xls binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.h5 binary
+*.hdf5 binary

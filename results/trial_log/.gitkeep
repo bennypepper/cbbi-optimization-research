@@ -1,0 +1,3 @@
+# Trial log .parquet files are excluded from git (too large).
+# Run the grid search pipeline to regenerate them locally.
+# See: src/optimization/run_phase3.py

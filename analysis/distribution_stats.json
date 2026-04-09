@@ -1,0 +1,452 @@
+{
+  "cbbi_confidence": {
+    "conditions": {
+      "accumulation": {
+        "mean": 13.8888,
+        "median": 12.82,
+        "std": 6.5623,
+        "iqr": 12.05,
+        "min": 0.54,
+        "max": 24.99,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 40.7105,
+        "median": 39.38,
+        "std": 8.5949,
+        "iqr": 12.6425,
+        "min": 25.18,
+        "max": 59.93,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 69.2305,
+        "median": 68.04,
+        "std": 5.77,
+        "iqr": 9.8475,
+        "min": 60.18,
+        "max": 79.99,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 88.6374,
+        "median": 87.26,
+        "std": 6.6603,
+        "iqr": 12.34,
+        "min": 80.0,
+        "max": 99.98,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2600.8673,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "pi_cycle": {
+    "conditions": {
+      "accumulation": {
+        "mean": 10.9233,
+        "median": 4.63,
+        "std": 13.5666,
+        "iqr": 16.81,
+        "min": 0.0,
+        "max": 46.38,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 53.8281,
+        "median": 59.08,
+        "std": 18.6682,
+        "iqr": 25.81,
+        "min": 0.0,
+        "max": 89.19,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 82.0129,
+        "median": 82.03,
+        "std": 10.2078,
+        "iqr": 14.3225,
+        "min": 58.59,
+        "max": 95.99,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 93.6706,
+        "median": 95.13,
+        "std": 4.8264,
+        "iqr": 5.255,
+        "min": 75.34,
+        "max": 99.83,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2217.3443,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "rupl": {
+    "conditions": {
+      "accumulation": {
+        "mean": 29.6965,
+        "median": 29.99,
+        "std": 15.0325,
+        "iqr": 24.59,
+        "min": 0.0,
+        "max": 60.89,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 67.7323,
+        "median": 68.755,
+        "std": 10.7232,
+        "iqr": 15.475,
+        "min": 38.16,
+        "max": 93.68,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 85.0908,
+        "median": 87.52,
+        "std": 9.0055,
+        "iqr": 11.845,
+        "min": 53.76,
+        "max": 99.1,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 93.3429,
+        "median": 93.74,
+        "std": 5.7215,
+        "iqr": 8.53,
+        "min": 77.87,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2275.592,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "rhodl_ratio": {
+    "conditions": {
+      "accumulation": {
+        "mean": 8.2474,
+        "median": 0.0,
+        "std": 13.2687,
+        "iqr": 17.47,
+        "min": 0.0,
+        "max": 50.26,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 30.5322,
+        "median": 31.38,
+        "std": 17.3056,
+        "iqr": 27.6575,
+        "min": 0.0,
+        "max": 79.97,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 68.0338,
+        "median": 71.05,
+        "std": 14.4241,
+        "iqr": 20.455,
+        "min": 32.78,
+        "max": 94.09,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 90.2863,
+        "median": 93.01,
+        "std": 11.1496,
+        "iqr": 15.37,
+        "min": 47.94,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 1956.9948,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "puell_multiple": {
+    "conditions": {
+      "accumulation": {
+        "mean": 19.3576,
+        "median": 16.08,
+        "std": 10.3328,
+        "iqr": 13.89,
+        "min": 0.0,
+        "max": 49.11,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 41.5199,
+        "median": 43.03,
+        "std": 12.9439,
+        "iqr": 19.0475,
+        "min": 4.49,
+        "max": 78.72,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 65.6727,
+        "median": 67.145,
+        "std": 9.4355,
+        "iqr": 11.3675,
+        "min": 43.29,
+        "max": 86.95,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 85.4604,
+        "median": 85.29,
+        "std": 8.6698,
+        "iqr": 13.095,
+        "min": 64.18,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2062.1525,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "two_year_ma_mult": {
+    "conditions": {
+      "accumulation": {
+        "mean": 13.7284,
+        "median": 12.15,
+        "std": 7.5147,
+        "iqr": 14.06,
+        "min": 0.0,
+        "max": 29.03,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 40.6223,
+        "median": 40.8,
+        "std": 9.1402,
+        "iqr": 12.5575,
+        "min": 15.36,
+        "max": 65.5,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 67.7236,
+        "median": 68.185,
+        "std": 6.772,
+        "iqr": 9.7275,
+        "min": 49.82,
+        "max": 82.2,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 85.9972,
+        "median": 85.2,
+        "std": 8.0071,
+        "iqr": 14.22,
+        "min": 70.21,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2545.7726,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "trolololo": {
+    "conditions": {
+      "accumulation": {
+        "mean": 7.2774,
+        "median": 1.34,
+        "std": 10.3344,
+        "iqr": 10.48,
+        "min": 0.0,
+        "max": 38.79,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 22.5526,
+        "median": 20.235,
+        "std": 21.0269,
+        "iqr": 39.075,
+        "min": 0.0,
+        "max": 72.98,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 54.0099,
+        "median": 49.845,
+        "std": 17.8803,
+        "iqr": 25.47,
+        "min": 19.45,
+        "max": 92.62,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 84.5158,
+        "median": 89.57,
+        "std": 13.8298,
+        "iqr": 23.825,
+        "min": 54.69,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 1362.2555,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "mvrv_zscore": {
+    "conditions": {
+      "accumulation": {
+        "mean": 10.8689,
+        "median": 10.92,
+        "std": 8.9487,
+        "iqr": 16.33,
+        "min": 0.0,
+        "max": 31.68,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 42.7449,
+        "median": 43.235,
+        "std": 11.3903,
+        "iqr": 16.775,
+        "min": 15.96,
+        "max": 78.29,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 68.2513,
+        "median": 69.585,
+        "std": 13.6455,
+        "iqr": 19.905,
+        "min": 33.25,
+        "max": 100.0,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 85.4252,
+        "median": 87.16,
+        "std": 10.7748,
+        "iqr": 12.575,
+        "min": 58.71,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2365.3922,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "reserve_risk": {
+    "conditions": {
+      "accumulation": {
+        "mean": 6.5736,
+        "median": 7.41,
+        "std": 6.713,
+        "iqr": 11.26,
+        "min": 0.0,
+        "max": 30.96,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 28.2766,
+        "median": 25.945,
+        "std": 16.1194,
+        "iqr": 22.5425,
+        "min": 0.0,
+        "max": 78.21,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 68.1185,
+        "median": 69.56,
+        "std": 14.7612,
+        "iqr": 22.61,
+        "min": 39.12,
+        "max": 100.0,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 92.9531,
+        "median": 95.4,
+        "std": 7.4591,
+        "iqr": 14.73,
+        "min": 74.56,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2135.9502,
+      "p_value": 0.0,
+      "significant": true
+    }
+  },
+  "woobull": {
+    "conditions": {
+      "accumulation": {
+        "mean": 15.1654,
+        "median": 13.79,
+        "std": 7.5618,
+        "iqr": 14.08,
+        "min": 0.0,
+        "max": 30.78,
+        "n": 757
+      },
+      "neutral": {
+        "mean": 37.8753,
+        "median": 37.37,
+        "std": 8.6535,
+        "iqr": 11.575,
+        "min": 5.35,
+        "max": 64.01,
+        "n": 1902
+      },
+      "distribution": {
+        "mean": 64.1616,
+        "median": 64.27,
+        "std": 6.9298,
+        "iqr": 10.45,
+        "min": 45.22,
+        "max": 81.93,
+        "n": 466
+      },
+      "euphoria": {
+        "mean": 86.0874,
+        "median": 84.79,
+        "std": 9.2552,
+        "iqr": 17.85,
+        "min": 66.86,
+        "max": 100.0,
+        "n": 163
+      }
+    },
+    "kruskal_wallis": {
+      "H_stat": 2484.516,
+      "p_value": 0.0,
+      "significant": true
+    }
+  }
+}

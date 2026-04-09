@@ -1,0 +1,118 @@
+{
+  "generated_at": "2026-04-09T20:30:55.093227",
+  "phase_used": "in_sample",
+  "date_range": {
+    "start": "2012-01-01",
+    "end": "2020-12-31"
+  },
+  "selection_criteria": {
+    "composite_score_min": 0.4,
+    "p_value_max": 0.05,
+    "min_indicators": 3
+  },
+  "selected_indicators": [
+    "trolololo",
+    "cbbi_confidence",
+    "woobull",
+    "puell_multiple",
+    "two_year_ma_mult",
+    "mvrv_zscore",
+    "reserve_risk",
+    "rupl",
+    "pi_cycle",
+    "rhodl_ratio"
+  ],
+  "default_signal_column": "cbbi_confidence",
+  "ranking": [
+    {
+      "indicator": "trolololo",
+      "label": "Trolololo (LogReg)",
+      "composite_score": 0.6557,
+      "best_lag_days": 90,
+      "best_spearman_rho": -0.4261,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "cbbi_confidence",
+      "label": "CBBI Confidence",
+      "composite_score": 0.5779,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2965,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "woobull",
+      "label": "Woobull NVT",
+      "composite_score": 0.5753,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2922,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "puell_multiple",
+      "label": "Puell Multiple",
+      "composite_score": 0.5722,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.287,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "two_year_ma_mult",
+      "label": "2Y MA Multiplier",
+      "composite_score": 0.5606,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2677,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "mvrv_zscore",
+      "label": "MVRV Z-Score",
+      "composite_score": 0.5595,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2658,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "reserve_risk",
+      "label": "Reserve Risk",
+      "composite_score": 0.5586,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2643,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "rupl",
+      "label": "RUPL",
+      "composite_score": 0.5571,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2618,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "pi_cycle",
+      "label": "Pi Cycle Top",
+      "composite_score": 0.5492,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.2487,
+      "best_p_value": 0.0,
+      "selected": true
+    },
+    {
+      "indicator": "rhodl_ratio",
+      "label": "RHODL Ratio",
+      "composite_score": 0.5082,
+      "best_lag_days": 14,
+      "best_spearman_rho": -0.1803,
+      "best_p_value": 0.0,
+      "selected": true
+    }
+  ]
+}
