@@ -4,7 +4,7 @@
 
 > This repository is the research backbone for a PKL (Practicum Kerja Lapangan) research project.
 > It covers **Phases 1–3**: data pipeline, statistical feature selection, and the backtesting optimization engine.
-> The interactive web dashboard (Phase 4) lives in a [separate repository](https://github.com/yourusername/cbbi-dashboard) *(coming soon)*.
+> The interactive web dashboard (Phase 4) lives in a [separate repository](https://github.com/bennypepper/cbbi-dashboard) *(coming soon)*.
 
 ---
 
