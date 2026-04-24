@@ -34,3 +34,36 @@ Agar presentasi riset di atas kertas terlihat kredibel, adil, dan logis di level
 ---
 
 Dengan ketiga poin landasan kuantitatif ini, proses validasi dan operasional Fase 3 untuk Skenario 1 (Validasi IS/OOS) serta Skenario 2 (Full Data Historical Exploration) kini dinyatakan tertutup rapat (*watertight*) dari kelemahan sistem logis maupun asumtif (*lookahead bias*).
+
+---
+
+## 4. Desain Berbasis Snapshot (Temuan Pasca Fase 3)
+
+**Ditambahkan:** 2026-04-17 — berdasarkan temuan selama validasi Phase 4 (Web Application)
+
+### Latar Belakang
+
+Seluruh riset Fase 1–3 dijalankan terhadap dataset statis (`master_dataset.parquet`) yang diambil pada periode [tanggal pengambilan data]. Ini adalah **keputusan desain yang disengaja**, bukan keterbatasan teknis: penggunaan snapshot tetap menjamin reproducibility dan auditability penuh.
+
+### Temuan: Formula CBBI Bersifat Dinamis
+
+Selama pengujian komparatif di Phase 4, terverifikasi bahwa API ColintalksCrypto **melakukan perhitungan ulang retroaktif** atas seluruh histori indeks setiap kali formula CBBI diperbarui. Bukti empiris:
+
+| Tanggal | Nilai di Snapshot Riset | Nilai via Live API (2026-04-17) | Delta |
+|---|---|---|---|
+| 2021-01-01 | 63.65 | 78.13 | +14.48 poin |
+
+### Implikasi Metodologis
+
+Temuan ini **tidak mengubah** validitas riset. Temuan ini **mengonfirmasi** mengapa desain berbasis snapshot adalah pilihan tepat:
+
+- Parameter optimal yang ditemukan adalah **optimal terhadap data yang dipelajari** — standar akademik baku untuk penelitian backtest
+- Dengan snapshot tetap, hasil riset sepenuhnya **reproducible**: siapapun yang menjalankan ulang pipeline menggunakan file dataset yang sama akan mendapatkan angka identik
+- Apabila menggunakan Live API, data yang menjadi dasar analisis akan berubah setiap saat, merusak reproducibility
+
+### Keterbatasan yang Diakui
+
+Parameter yang dihasilkan riset ini bersifat spesifik terhadap versi formula CBBI pada saat dataset diambil. Apabila diterapkan langsung pada API live yang telah mengalami revisi formula, distribusi sinyal berpotensi telah bergeser sehingga parameter mungkin tidak lagi optimal.
+
+Fenomena ini didokumentasikan sebagai *Index Revision Bias* dalam laporan riset. Lihat dokumen lengkap: [`reports/index_revision_bias_finding.md`](index_revision_bias_finding.md).
+

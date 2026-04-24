@@ -1,0 +1,25 @@
+
+================================================================================
+                    AUDIT SUMMARY — Final PASS / FAIL Report                    
+================================================================================
+
+  [✅ PASS]  Fase 1.1 — IS/OOS boundary tepat (31 Des 2020)
+  [✅ PASS]  Fase 1.2 — Tidak ada lookahead di data pipeline
+  [⏭ SKIP]  Fase 1.3 — Tidak ada backward fill di fill_log
+  [⏭ SKIP]  Fase 1.3 — Max forward fill streak ≤ 7 hari
+  [✅ PASS]  Fase 2.1 — Trolololo signifikan di semua lag
+  [✅ PASS]  Fase 2.2 — Trolololo ranking #1 composite score
+  [✅ PASS]  Fase 2.2 — Trolololo ρ@90d > 0.30 (strong signal)
+  [✅ PASS]  Fase 3.1 — Eksekusi selalu di T+1 Open
+  [✅ PASS]  Fase 3.2 — Fee 0.1% dihitung presisi
+  [✅ PASS]  Fase 3.3 — Sharpe memakai √365 bukan √252
+  [❌ FAIL]  Fase 3.4 — Optimal max_return memimpin leaderboard return
+  [✅ PASS]  Fase 3.4 — Optimal min_drawdown memimpin leaderboard drawdown
+  [❌ FAIL]  Fase 3.4 — Optimal max_sharpe memimpin leaderboard sharpe
+
+  ══════════════════════════════════════════════════════════════════════
+  RESULT: 9/11 checkpoints PASSED  (2 skipped)
+  ⚠   2 checkpoint GAGAL — perlu investigasi.
+
+  Audit dijalankan pada: 2026-04-16 23:07:38
+  Python: C:\Users\Benny Pepper\AppData\Local\Programs\Python\Python311\python.exe

@@ -1,0 +1,48 @@
+
+================================================================================
+              FASE 1 — Verifikasi Integritas Data (Data Pipeline)               
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1.1 — Batas IS / OOS Split (31 Des 2020)
+────────────────────────────────────────────────────────────────────────────────
+
+  Kolom 'phase' tersedia : Ya
+  Last IS  date  : 2020-12-31 (expected ≤ 2020-12-31)
+  First OOS date : 2021-01-01 (expected ≥ 2021-01-01)
+  [✅ PASS] IS/OOS boundary tepat
+         → last_IS=2020-12-31 | first_OOS=2021-01-01
+
+────────────────────────────────────────────────────────────────────────────────
+  1.2 — Anti-Lookahead Bias Spot Check (5 Tanggal Acak)
+────────────────────────────────────────────────────────────────────────────────
+
+  Prinsip: btc_open[T] = harga pembukaan BTC pada tanggal T
+  Periksa: btc_open[T+1] berbeda dari btc_close[T] (bukan duplikat)
+
+  2017-12-15  close= 17,703.00  open_T= 16,601.30  open_T+1= 17,760.30  ✅ OK
+  2020-03-12  close= 19,471.00  open_T=  7,913.62  open_T+1=  5,017.83  ✅ OK
+  2019-06-26  close= 12,864.00  open_T= 11,778.58  open_T+1= 13,017.12  ✅ OK
+  2021-11-10  close= 57,290.00  open_T= 66,953.34  open_T+1= 64,978.89  ✅ OK
+  2022-11-08  close= 23,935.00  open_T= 20,600.67  open_T+1= 18,543.76  ✅ OK
+
+  [✅ PASS] Tidak ada data open = close kemarin (no lookahead)
+
+────────────────────────────────────────────────────────────────────────────────
+  1.3 — Forward Fill Check (fill_log.csv)
+────────────────────────────────────────────────────────────────────────────────
+
+  Total fill events : 990
+  (kolom consecutive_fill_days tidak ada — skip streak check)
+
+────────────────────────────────────────────────────────────────────────────────
+    Data Coverage Overview
+────────────────────────────────────────────────────────────────────────────────
+
+  Total rows    : 5161
+  Date range    : 2012-01-01 → 2026-03-15
+  Columns       : ['btc_close', 'btc_open', 'cbbi_confidence', 'pi_cycle', 'rupl', 'rhodl_ratio', 'puell_multiple', 'two_year_ma_mult', 'trolololo', 'mvrv_zscore', 'reserve_risk', 'woobull', 'fill_flag', 'phase']
+  NaN [btc_open] : 0
+  NaN [btc_close]: 0
+  NaN [trolololo]: 0

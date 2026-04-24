@@ -1,0 +1,93 @@
+
+================================================================================
+            FASE 2 — Verifikasi Basis Statistik: Trolololo Dominance            
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2.1 — Spearman Korelasi: Trolololo vs Semua Indikator
+────────────────────────────────────────────────────────────────────────────────
+
+    Lag  Indikator                           ρ       p-value  Status
+  ─────  ─────────────────────────  ──────────  ────────────  ──────────
+      7  cbbi_confidence               -0.2609      0.000000  ✅
+      7  woobull                       -0.2551      0.000000  ✅
+      7  pi_cycle                      -0.2480      0.000000  ✅
+      7  puell_multiple                -0.2390      0.000000  ✅
+      7  mvrv_zscore                   -0.2378      0.000000  ✅
+      7  two_year_ma_mult              -0.2338      0.000000  ✅
+      7  reserve_risk                  -0.2309      0.000000  ✅
+      7  rupl                          -0.2298      0.000000  ✅
+      7  trolololo                     -0.2297      0.000000  ✅ ◀ TROLO
+      7  rhodl_ratio                   -0.1467      0.000000  ✅
+
+     14  cbbi_confidence               -0.2965      0.000000  ✅
+     14  woobull                       -0.2922      0.000000  ✅
+     14  puell_multiple                -0.2870      0.000000  ✅
+     14  trolololo                     -0.2757      0.000000  ✅ ◀ TROLO
+     14  two_year_ma_mult              -0.2677      0.000000  ✅
+     14  mvrv_zscore                   -0.2658      0.000000  ✅
+     14  reserve_risk                  -0.2643      0.000000  ✅
+     14  rupl                          -0.2618      0.000000  ✅
+     14  pi_cycle                      -0.2487      0.000000  ✅
+     14  rhodl_ratio                   -0.1803      0.000000  ✅
+
+     30  trolololo                     -0.2585      0.000000  ✅ ◀ TROLO
+     30  reserve_risk                  -0.1574      0.000000  ✅
+     30  woobull                       -0.1273      0.000000  ✅
+     30  cbbi_confidence               -0.1250      0.000000  ✅
+     30  rhodl_ratio                   -0.1137      0.000000  ✅
+     30  two_year_ma_mult              -0.1046      0.000000  ✅
+     30  puell_multiple                -0.0821      0.000003  ✅
+     30  mvrv_zscore                   -0.0701      0.000062  ✅
+     30  rupl                          -0.0649      0.000208  ✅
+     30  pi_cycle                      -0.0168      0.338316  ❌
+
+     60  trolololo                     -0.3504      0.000000  ✅ ◀ TROLO
+     60  reserve_risk                  -0.2051      0.000000  ✅
+     60  cbbi_confidence               -0.1570      0.000000  ✅
+     60  woobull                       -0.1500      0.000000  ✅
+     60  rhodl_ratio                   -0.1373      0.000000  ✅
+     60  two_year_ma_mult              -0.1219      0.000000  ✅
+     60  puell_multiple                -0.1210      0.000000  ✅
+     60  mvrv_zscore                   -0.0700      0.000068  ✅
+     60  rupl                          -0.0619      0.000437  ✅
+     60  pi_cycle                      -0.0127      0.472241  ❌
+
+     90  trolololo                     -0.4261      0.000000  ✅ ◀ TROLO
+     90  reserve_risk                  -0.2447      0.000000  ✅
+     90  cbbi_confidence               -0.1834      0.000000  ✅
+     90  woobull                       -0.1721      0.000000  ✅
+     90  rhodl_ratio                   -0.1614      0.000000  ✅
+     90  two_year_ma_mult              -0.1436      0.000000  ✅
+     90  puell_multiple                -0.1397      0.000000  ✅
+     90  mvrv_zscore                   -0.0735      0.000032  ✅
+     90  rupl                          -0.0547      0.001987  ✅
+     90  pi_cycle                      -0.0223      0.207631  ❌
+
+  [✅ PASS] Trolololo signifikan di semua lag yang diuji
+
+────────────────────────────────────────────────────────────────────────────────
+  2.2 — Ranking Indikator (Composite Score)
+────────────────────────────────────────────────────────────────────────────────
+
+  Rank  Indicator                     Score   Best Lag    Best ρ  Selected
+  ────  ─────────────────────────  ────────  ─────────  ────────  ────────
+     1  trolololo                    0.6557         90   -0.4261  ✅ ◀ TOP
+     2  cbbi_confidence              0.5779         14   -0.2965  ✅
+     3  woobull                      0.5753         14   -0.2922  ✅
+     4  puell_multiple               0.5722         14   -0.2870  ✅
+     5  two_year_ma_mult             0.5606         14   -0.2677  ✅
+     6  mvrv_zscore                  0.5595         14   -0.2658  ✅
+     7  reserve_risk                 0.5586         14   -0.2643  ✅
+     8  rupl                         0.5571         14   -0.2618  ✅
+     9  pi_cycle                     0.5492         14   -0.2487  ✅
+    10  rhodl_ratio                  0.5082         14   -0.1803  ✅
+
+  [✅ PASS] Trolololo adalah indikator #1 (composite score tertinggi)
+         → rank=1
+
+  📌 Narasi Kunci:
+     Pada lag 90 hari, Trolololo mencatatkan ρ = -0.4261 (lebih kuat negatif — SANGAT signifikan, p≈0.00)
+     Ini berarti: ketika Trolololo tinggi, return BTC 90 hari ke depan
+     cenderung NEGATIF — inilah dasar ilmiah strategi 'jual saat euforia'.

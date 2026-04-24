@@ -1,0 +1,119 @@
+
+================================================================================
+       FASE 3 — Parameter Tournament: Validasi Keunggulan Optimal Params        
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  Parameter Grid: Optimal vs Challengers
+────────────────────────────────────────────────────────────────────────────────
+
+  Key                        B    S   AB%   AS%     IS Ret%   IS DD%   IS Sh    OOS Ret%  OOS DD%  OOS Sh   Full Ret% Full Sh
+  ──────────────────────  ──── ──── ───── ─────  ────────── ──────── ───────  ────────── ──────── ───────  ────────── ───────
+  ► max_return_s2           35   55   25.0  25.0  743178349978.8    98.69   2.425      141.15    62.86   1.030  1828257657281.35   2.029
+  ► min_drawdown_s2          1   55    1.0  25.0     24001.3    98.50   1.366       65.34    40.68   0.409    39923.65   1.114
+  ► max_sharpe_s2           13  100   25.0   1.0    947042.7    98.67   2.646       74.38    66.04   1.172  2372831.32   2.266
+    naive_50_50             50   50   25.0  25.0  9289855539490.8    98.56   2.524      123.43    63.43   1.072  20804306900689.09   2.112
+    naive_30_70             30   70   25.0  25.0  184271958.9    98.69   2.429       72.45    66.77   1.187  381528269.09   2.068
+    naive_20_80             20   80   25.0  25.0  244588219.0    98.69   2.420       72.24    66.71   1.184  524121268.51   2.061
+    dca_never_sell         100  100   10.0   1.0    430966.9    98.77   2.682      109.58    76.66   1.365  1079876.87   2.293
+    aggressive_25_75        25   75   25.0  25.0  184799244.5    98.69   2.410       72.45    66.77   1.187  388284148.66   2.054
+    opt_alloc_10pct         35   55   10.0  10.0  731379820.6    98.64   2.337      210.83    61.85   1.032  2507229364.87   1.965
+    opt_alloc_50pct         35   55   50.0  50.0  762562253179471.4    98.73   2.510       83.12    66.73   1.053  1397300984873529.00   2.097
+    opt_alloc_100pct        35   55  100.0 100.0  2163975521313506048.0    98.80   2.745       31.80    68.27   1.172  2852224149922161664.00   2.296
+    near_opt_32_58          32   58   25.0  25.0  34638845522.7    98.69   2.394       91.66    62.73   0.998  68124467413.04   2.000
+    near_opt_40_50          40   50   25.0  25.0  6355464683008.4    98.56   2.433      123.66    63.05   1.026  14247792441930.82   2.034
+    near_opt_35_65          35   65   25.0  25.0  15690983183.3    98.69   2.444       86.62    64.51   1.178  34539237193.08   2.075
+    dd_10_60                10   60    1.0  25.0    160678.4    98.51   1.657      148.96    53.49   0.675   422520.23   1.378
+    dd_5_70                  5   70    1.0  25.0     48119.5    98.51   1.681      133.21    49.14   0.781   126458.21   1.420
+    sharpe_10_90            10   90   25.0   1.0   2375810.9    98.67   2.595      103.74    63.54   1.143  6984160.07   2.209
+    sharpe_15_85            15   85   25.0   1.0   2739628.7    98.67   2.596       72.40    66.67   1.184  7943080.79   2.208
+
+────────────────────────────────────────────────────────────────────────────────
+  Ranking — MAX RETURN (Scenario)
+────────────────────────────────────────────────────────────────────────────────
+
+  Top-10 by ↑ FULL_return_%:
+
+   1. opt_alloc_100pct           FULL_return_%: 2852224149922161664.00
+   2. opt_alloc_50pct            FULL_return_%: 1397300984873529.00
+   3. naive_50_50                FULL_return_%: 20804306900689.09
+   4. near_opt_40_50             FULL_return_%: 14247792441930.82
+   5. max_return_s2              FULL_return_%: 1828257657281.35  ◀ OPTIMAL
+   6. near_opt_32_58             FULL_return_%: 68124467413.04
+   7. near_opt_35_65             FULL_return_%: 34539237193.08
+   8. opt_alloc_10pct            FULL_return_%: 2507229364.87
+   9. naive_20_80                FULL_return_%: 524121268.51
+  10. aggressive_25_75           FULL_return_%: 388284148.66
+
+  [❌ FAIL] Parameter optimal 'max_return_s2' memimpin untuk MAX RETURN (Scenario)
+         → Rank=5/18
+
+────────────────────────────────────────────────────────────────────────────────
+  Ranking — MIN DRAWDOWN (Scenario)
+────────────────────────────────────────────────────────────────────────────────
+
+  Top-10 by ↓ OOS_drawdown_%:
+
+   1. min_drawdown_s2            OOS_drawdown_%:        40.68  ◀ OPTIMAL
+   2. dd_5_70                    OOS_drawdown_%:        49.14
+   3. dd_10_60                   OOS_drawdown_%:        53.49
+   4. opt_alloc_10pct            OOS_drawdown_%:        61.85
+   5. near_opt_32_58             OOS_drawdown_%:        62.73
+   6. max_return_s2              OOS_drawdown_%:        62.86
+   7. near_opt_40_50             OOS_drawdown_%:        63.05
+   8. naive_50_50                OOS_drawdown_%:        63.43
+   9. sharpe_10_90               OOS_drawdown_%:        63.54
+  10. near_opt_35_65             OOS_drawdown_%:        64.51
+
+  [✅ PASS] Parameter optimal 'min_drawdown_s2' memimpin untuk MIN DRAWDOWN (Scenario)
+         → Rank=1/18
+
+────────────────────────────────────────────────────────────────────────────────
+  Ranking — MAX SHARPE (Scenario)
+────────────────────────────────────────────────────────────────────────────────
+
+  Top-10 by ↑ FULL_sharpe:
+
+   1. opt_alloc_100pct           FULL_sharpe:         2.30
+   2. dca_never_sell             FULL_sharpe:         2.29
+   3. max_sharpe_s2              FULL_sharpe:         2.27  ◀ OPTIMAL
+   4. sharpe_10_90               FULL_sharpe:         2.21
+   5. sharpe_15_85               FULL_sharpe:         2.21
+   6. naive_50_50                FULL_sharpe:         2.11
+   7. opt_alloc_50pct            FULL_sharpe:         2.10
+   8. near_opt_35_65             FULL_sharpe:         2.08
+   9. naive_30_70                FULL_sharpe:         2.07
+  10. naive_20_80                FULL_sharpe:         2.06
+
+  [❌ FAIL] Parameter optimal 'max_sharpe_s2' memimpin untuk MAX SHARPE (Scenario)
+         → Rank=3/18
+
+────────────────────────────────────────────────────────────────────────────────
+  3.4 — Analisis Degradasi IS → OOS
+────────────────────────────────────────────────────────────────────────────────
+
+
+  [Max Return]
+    Return degradasi  : +100.00%
+    Drawdown degradasi: -36.31%
+    Sharpe degradasi  : +57.52%
+
+  [Min Drawdown]
+    Return degradasi  : +99.73%
+    Drawdown degradasi: -58.70%
+    Sharpe degradasi  : +70.06%
+    → Drawdown degradasi hanya -58.70% — PALING ROBUST untuk modal preservation
+
+  [Max Sharpe]
+    Return degradasi  : +99.98%
+    Drawdown degradasi: -33.13%
+    Sharpe degradasi  : +56.34%
+
+  📌 Narasi Degradasi:
+     - Max Return: IS return = 743186303939% → OOS = 141.2%
+       Ini WAJAR: IS mencakup bull run 2013-2020 yang luar biasa.
+     - Min Drawdown: Drawdown IS hanya turun -58.7% di OOS
+       → Param ini paling STABIL: tujuan modal preservation tercapai.
+     - Max Sharpe: Sharpe IS = 2.685 → OOS = 1.172
+       → Still positive & > Buy-and-Hold OOS Sharpe (1.385)

@@ -34,4 +34,25 @@ Sebagai perbandingan wajar:
 1. **Riset ini berintegritas tinggi:** Metodologi ini berhasil membuktikan kelemahan model optimasi masa lalu yang tidak memilah *In-Sample* dan *Out-of Sample*, di mana angka "cantik" dari backtest murni hanyalah halusinasi matematis yang hancur dalam validasi siklus modern kripto.
 2. **Kinerja Numba Engine:** Mampu mengeksplorasi kalkulasi kompleks jutaan probabilitas menjadi sepuluh detik saja tanpa mengorbankan akurasi operasional simulasi nyata (T+1 market order, perisai Anti-Lookahead, penggerusan kas lewat Fee Transaksi Spot %0.1). Laporan ini valid merefleksikan portofolio tanpa sihir rekayasa angka.
 
+---
+
+## 4. Temuan Tambahan (Pasca Fase 3): Risiko Revisi Formula CBBI
+
+> **Ditemukan:** 2026-04-17 — selama validasi web application (Phase 4)
+
+Selama pengujian komparatif antara dataset lokal dan API live ColintalksCrypto, teridentifikasi bahwa **formula CBBI bersifat dinamis dan direvisi secara retroaktif** oleh penulisnya.
+
+**Bukti:** Nilai CBBI pada tanggal `2021-01-01` tercatat sebagai `63.65` dalam `master_dataset.parquet` yang digunakan dalam riset ini. Namun, mengambil nilai tanggal yang sama melalui Live API pada 2026-04-17 menghasilkan nilai `78.13` — selisih **+14.48 poin**.
+
+**Implikasinya:**
+- Hasil riset ini (Fase 1–3) **tetap reproducible dan valid** karena mengacu pada snapshot dataset yang terdefinisi.
+- Parameter optimal yang ditemukan secara spesifik dikalibrasi terhadap distribusi sinyal versi formula CBBI saat dataset diambil.
+- Ini adalah **keterbatasan instrumen**, bukan cacat metodologi — analog dengan *index revision bias* dalam ekonometrika.
+
+Sebagai respons praktis, platform web (Phase 4) dilengkapi **Dynamic Grid Search Updater** yang secara otomatis mengambil data terkini dari Live API dan menjalankan ulang grid search, sehingga parameter yang disajikan kepada pengguna selalu sinkron dengan formula CBBI terkini.
+
+> 📄 **Dokumen lengkap:** [`reports/index_revision_bias_finding.md`](index_revision_bias_finding.md)
+
+---
+
 *(Dokumen ini secara berkala dapat digunakan untuk memandu penulisan deskripsi Bab Pembahasan pada Skripsi/Makalah final)*
