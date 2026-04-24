@@ -4,7 +4,7 @@
 
 > This repository is the research backbone for a PKL (Practicum Kerja Lapangan) research project.
 > It covers **Phases 1–3**: data pipeline, statistical feature selection, and the backtesting optimization engine.
-> The interactive web dashboard (Phase 4) lives in a [separate repository](https://github.com/bennypepper/cbbi-dashboard) *(coming soon)*.
+> The interactive web dashboard (Phase 4) lives in a [separate repository](https://github.com/bennypepper/cbbi-strategy-lab).
 
 ---
 
@@ -24,6 +24,7 @@ The engine runs a full grid search over **1,293,750 parameter combinations** acr
 2. What buy/sell threshold pair and asset allocation percentage maximizes Total Return?
 3. What configuration minimizes Maximum Drawdown and maximizes Sharpe Ratio?
 4. How much does performance degrade between In-Sample and Out-of-Sample (Scenario 1), and how does that compare to the historical maximum found in Scenario 2?
+5. *(Post Phase-4 finding)* How does parameter drift manifest when the CBBI formula is retroactively revised, and what architectural response mitigates this for live deployment?
 
 ---
 
@@ -145,6 +146,12 @@ cbbi-optimization-research/
 
 Phase 2 analysis identified `trolololo` as statistically superior to the composite CBBI Confidence Score across all lag windows — the basis for using it as the optimization signal in Phase 3, rather than the default composite.
 
+**Post Phase-4 Finding: CBBI Index Revision Bias**
+
+During web application validation (Phase 4), a structural property of the CBBI instrument was documented: the ColintalksCrypto API **retroactively recalculates its entire historical index** whenever Colin updates the formula (e.g., removing Stock-to-Flow from composition). Empirical proof: the value recorded for `2021-01-01` in this research's frozen dataset is `63.65`; the same date queried via the Live API on 2026-04-17 returns `78.13` — a drift of **+14.48 points**.
+
+This is classified as an **instrument-level limitation** analogous to *index revision bias* in econometrics, not a flaw in this research's methodology. The frozen `master_dataset.parquet` remains a valid, reproducible research artifact. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md) for full documentation including draft language for the Limitations chapter.
+
 ---
 
 ## Methodology
@@ -203,11 +210,15 @@ Three independent objectives per scenario:
 | CBBI indicators (all 9) + composite score | [cbbi.info](https://cbbi.info) — official CBBI dataset | Free, manual download |
 | BTC daily open/close prices | [Yahoo Finance](https://finance.yahoo.com) via `yfinance` | Free, auto-fetched |
 
+> ⚠️ **Dataset Snapshot Notice:** The CBBI dataset used in this research is a **static snapshot** taken at the time of Phase 1 pipeline execution. The ColintalksCrypto API retroactively updates its historical values when the index formula changes. Results from this repository are reproducible only against the frozen `master_dataset.parquet`, not against a live API query of the same date range. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).
+
 ---
 
 ## Disclaimer
 
 This project is a **research artifact** completed as part of a PKL (Practicum Kerja Lapangan) research program. All content is for educational and academic purposes only. Nothing in this repository constitutes financial advice. Cryptocurrency markets carry substantial risk, and past performance does not guarantee future results.
+
+Optimal parameters reported in this repository are calibrated against a specific frozen snapshot of the CBBI dataset. Deploying these parameters against the live API without re-optimization may yield different performance outcomes due to retroactive formula revisions by the index author. This limitation is fully documented in [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).
 
 ---
 

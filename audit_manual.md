@@ -98,7 +98,7 @@ Fase ini membuktikan bahwa tidak ada "Magic Math" dari program (Anti-Lookahead B
 
 ## 🚀 Shortcut & Command Eksekusi Terminal (Cheatsheet)
 
-Jalankan perintah ini di VSCode/Terminal dari _root directory_ proyek Anda (directory: `d:\Personal Projects\PKL_v4`).
+Jalankan perintah ini di VSCode/Terminal dari _root directory_ repositori Anda.
 
 | Tujuan Uji Coba | Command Eksekusi |
 | :--- | :--- |
@@ -111,4 +111,53 @@ Jalankan perintah ini di VSCode/Terminal dari _root directory_ proyek Anda (dire
 Saat Anda ditanya di CLI, pastikan Anda mencoba meng-input data agresif (Alokasi 100%) dan data konservatif untuk menekan ujung-ujung perhitungan kalkulator.
 
 ---
-*Dibuat untuk persiapan validasi end-to-end kelulusan Fase 3.*
+
+## 🌐 FASE 4: Verifikasi Aplikasi Web & Temuan Index Revision Bias
+
+> **Status:** Selesai — 2026-04-17
+
+Fase ini mencakup validasi platform simulasi interaktif (Phase 4 — Web App) dan mendokumentasikan temuan penting yang muncul selama proses tersebut.
+
+### 4.1. Paritas Engine IS/OOS antara CLI dan Web App
+
+*   **Tujuan:** Memastikan engine di web app (pada repository web app `core/engine.py`) identik secara matematis dengan CLI prototype (`src/optimization/verify_manual.py`).
+*   **Hasil:** ✅ **LULUS** — Kedua engine menghasilkan jumlah trade identik (465 transaksi) dan return identik (+141.2%) pada parameter dan rentang tanggal yang sama, menggunakan data Historical CSV.
+
+### 4.2. Pengecekan Scaling API
+
+*   **Tujuan:** Memastikan data dari Live CBBI API diskalakan dengan benar sebelum dimasukkan ke engine.
+*   **Temuan & Perbaikan:** API Live ColintalksCrypto mengembalikan nilai Confidence sebagai desimal (`0.0–1.0`), sementara engine mengasumsikan skala persentase (`0–100`). Diperbaiki di repositori web app (`core/data_loader.py`) dengan mengalikan nilai ingest Live API dengan `× 100.0`.
+*   **Hasil:** ✅ **DIPERBAIKI** — Engine sekarang memproses sinyal dengan benar dari kedua sumber data.
+
+### 4.3. Investigasi & Dokumentasi: CBBI Index Revision Bias ⚠️
+
+*   **Tujuan:** Menjelaskan mengapa penggunaan Live CBBI API dengan parameter optimal hasil riset menghasilkan performa yang berbeda dari backtest berbasis snapshot.
+*   **Temuan:**
+
+    | Aspek | Detail |
+    |---|---|
+    | **Fenomena** | API Live ColintalksCrypto melakukan recalculation retroaktif atas seluruh histori indeks setiap formula direvisi |
+    | **Bukti empiris** | Nilai `2021-01-01`: snapshot riset = `63.65` vs Live API (2026-04-17) = `78.13` → drift **+14.48 poin** |
+    | **Dampak praktis** | Parameter optimal dikalibrasi terhadap distribusi sinyal lama → misfit dengan distribusi sinyal baru → performa berbeda |
+    | **Klasifikasi** | *Index Revision Bias* — keterbatasan instrumen, bukan cacat metodologi |
+
+*   **Status riset Fase 1–3:** ✅ **TETAP VALID** — Semua hasil dapat direproduksi terhadap snapshot dataset yang terdefinisi.
+*   **Respons praktis (Phase 4):** Dynamic Grid Search Updater — mengambil data Live API → menjalankan ulang grid search → menghasilkan `live_optimal_params.json` yang selalu sinkron.
+
+*   📄 **Dokumentasi lengkap:** [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md)
+
+### 4.4. Audit Batas Penelitian vs Platform Deployment
+
+*   **Tujuan:** Memisahkan secara eksplisit apa yang merupakan lingkup riset dan apa yang merupakan ekstensi platform.
+
+    | Komponen | Lingkup |
+    |---|---|
+    | `master_dataset.parquet` + Fase 1–3 results | **Riset akademik** — tidak berubah, reproducible |
+    | Simulator dengan Historical CSV | **Riset akademik** — alat verifikasi parameter |
+    | Dynamic Grid Search Updater | **Platform praktis** — di luar lingkup riset akademik, sebagai "Future Work" |
+    | Live API comparison | **Temuan riset tambahan** — didokumentasikan sebagai keterbatasan |
+
+---
+
+*Audit Fase 4 selesai. Seluruh checkpoint telah didokumentasikan.*
+
