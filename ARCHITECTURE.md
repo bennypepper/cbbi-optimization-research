@@ -1,4 +1,4 @@
-# Product Requirements Document (PRD)
+# Dokumentasi Arsitektur Sistem
 ## Sistem Optimisasi Strategi Perdagangan Bitcoin Berbasis Indikator CBBI
 
 **Versi:** 2.0  
@@ -63,25 +63,25 @@ Penelitian ini berlandaskan pada sejumlah kerangka konseptual dan referensi empi
 4. **Metodologi pemisahan data In-Sample dan Out-of-Sample** dalam konteks pengembangan strategi perdagangan yang robust.
 5. **Karakteristik siklus makro aset kripto** dan implikasinya terhadap frekuensi sinyal perdagangan berbasis indikator on-chain.
 
-> **Target:** Ringkasan 5–7 referensi akademis diselesaikan pada Minggu 1 penelitian (Fase 1) sebelum eksekusi pengumpulan data.
+> **Target Literatur:** Kajian komprehensif terhadap literatur-literatur ini membentuk landasan metodologis sebelum eksekusi pengumpulan data.
 
-### 1.7 Struktur Empat Fase
+### 1.7 Arsitektur Empat Komponen Utama
 
 ```
-FASE 1: Data Pipeline & Preprocessing
+KOMPONEN 1: Data Pipeline & Preprocessing
         |
-FASE 2: Seleksi Indikator & Analisis Statistik
+KOMPONEN 2: Seleksi Indikator & Analisis Statistik
         |
-FASE 3: Mesin Optimisasi Dua Skenario & Validasi
+KOMPONEN 3: Mesin Optimisasi Dua Skenario & Validasi
         |
-FASE 4: Aplikasi Web Interaktif (Deploy Online)
+KOMPONEN 4: Aplikasi Web Interaktif (Deploy Online)
 ```
 
 ---
 
-## 2. FASE 1 — Data Pipeline & Preprocessing
+## 2. KOMPONEN 1 — Data Pipeline & Preprocessing
 
-### 2.1 Tujuan Fase
+### 2.1 Tujuan Komponen
 
 Menghasilkan satu dataset master yang bersih, lengkap, dan siap digunakan oleh seluruh modul downstream. Dataset master dibentuk dari dua sumber yang saling melengkapi: (1) file XLSX resmi CBBI yang sudah mengandung seluruh indikator dan Confidence Score, dan (2) data harga BTC harian dari `yfinance` yang diperlukan untuk kolom `btc_open` sebagai harga eksekusi T+1. Dataset akhir harus bebas dari lookahead bias pada level preprocessing dan memiliki indeks waktu yang konsisten.
 
@@ -226,7 +226,7 @@ def build_master_dataset(
     end_date: str = "2026-03-31"
 ) -> pd.DataFrame:
     """
-    Fungsi orkestrasi utama Fase 1.
+    Fungsi orkestrasi utama Komponen 1.
     Memanggil secara berurutan:
       1. load_cbbi_xlsx()       — muat dan parse file XLSX
       2. fetch_btc_open()       — ambil btc_open dari yfinance
@@ -266,7 +266,7 @@ def build_master_dataset(
 > - Normalisasi tidak diperlukan karena seluruh indikator sudah dalam skala [0–100] yang disediakan oleh sistem CBBI resmi.
 > - Kolom `cbbi_confidence` merupakan Composite CBBI Score resmi dan menjadi **kolom sinyal default** pada mesin optimisasi (Fase 3).
 
-### 2.5 Struktur Direktori Fase 1
+### 2.5 Struktur Direktori Komponen 1
 
 ```
 cbbi-optimization/
@@ -285,7 +285,7 @@ cbbi-optimization/
         └── preprocessor.py     # merge, fill, validate, tag_phases, build_master_dataset()
 ```
 
-### 2.6 Kriteria Keberhasilan Fase 1
+### 2.6 Indikator Output Komponen 1
 
 - File `CBBI_dataset.xlsx` berhasil di-parse: seluruh 12 kolom terbaca, nilai string persentase terkonversi ke float64, DatetimeIndex terurut ascending.
 - Dataset master mencakup rentang 2012-01-01 hingga 2026-03-31 tanpa gap pada kolom `btc_close` dan `btc_open`.
@@ -297,9 +297,9 @@ cbbi-optimization/
 
 ---
 
-## 3. FASE 2 — Seleksi Indikator & Analisis Statistik
+## 3. KOMPONEN 2 — Seleksi Indikator & Analisis Statistik
 
-### 3.1 Tujuan Fase
+### 3.1 Tujuan Komponen
 
 Mengidentifikasi secara kuantitatif indikator CBBI mana yang memiliki korelasi statistik paling kuat dengan pergerakan harga Bitcoin pada berbagai lag waktu. Output fase ini menentukan indikator yang dijadikan basis sinyal pada Fase 3. Seluruh analisis dijalankan hanya pada data In-Sample untuk menghindari data leakage.
 
@@ -316,9 +316,9 @@ def compute_forward_returns(price_series: pd.Series, lag: int) -> pd.Series:
     """
     Menghitung forward return: (P[t+lag] - P[t]) / P[t]
 
-    CRITICAL: Hanya digunakan untuk analisis statistik (Fase 2).
-    TIDAK boleh digunakan dalam logika backtesting (Fase 3).
-    Penggunaan forward return di Fase 3 merupakan bentuk lookahead bias.
+    CRITICAL: Hanya digunakan untuk analisis statistik (Komponen 2).
+    TIDAK boleh digunakan dalam logika backtesting (Komponen 3).
+    Penggunaan forward return di Komponen 3 merupakan bentuk lookahead bias.
     """
     return price_series.pct_change(lag).shift(-lag)
 
@@ -379,14 +379,14 @@ def rank_indicators(correlation_df: pd.DataFrame,
     """
 ```
 
-### 3.3 Output Fase 2
+### 3.3 Output Komponen 2
 
 | File | Format | Isi |
 | :--- | :--- | :--- |
 | `analysis/spearman_results.csv` | CSV | Korelasi semua indikator x semua lag |
 | `analysis/distribution_stats.json` | JSON | Statistik distribusi per kondisi pasar |
 | `analysis/indicator_ranking.csv` | CSV | Pemeringkatan final + flag `selected` |
-| `analysis/selected_indicators.json` | JSON | List indikator terpilih untuk Fase 3 |
+| `analysis/selected_indicators.json` | JSON | List indikator terpilih untuk Komponen 3 |
 | `reports/feature_selection_report.md` | Markdown | Narasi hasil analisis + referensi visualisasi |
 
 **Visualisasi yang dihasilkan:**
@@ -395,7 +395,7 @@ def rank_indicators(correlation_df: pd.DataFrame,
 - Bar chart composite score pemeringkatan indikator
 - Scatter plot indikator terpilih vs forward return 30/60/90 hari
 
-### 3.4 Kriteria Keberhasilan Fase 2
+### 3.4 Indikator Output Komponen 2
 
 - Seluruh 9 indikator individual + `cbbi_confidence` (Composite Score resmi) telah dianalisis pada 5 lag window menggunakan data In-Sample.
 - Minimal 3 indikator memenuhi ambang seleksi (composite score ≥ 0.4, p-value < 0.05).
@@ -404,9 +404,9 @@ def rank_indicators(correlation_df: pd.DataFrame,
 
 ---
 
-## 4. FASE 3 — Mesin Optimisasi Dua Skenario & Validasi
+## 4. KOMPONEN 3 — Mesin Optimisasi Dua Skenario & Validasi
 
-### 4.1 Tujuan Fase
+### 4.1 Tujuan Komponen
 
 Menemukan kombinasi parameter optimal melalui Grid Search sebagai metode primer (dengan Bayesian Optimization sebagai fallback), dijalankan secara paralel untuk dua skenario penelitian yang berbeda. Hasil optimal kemudian divalidasi, dikomparasikan, dan diverifikasi secara manual.
 
@@ -645,7 +645,7 @@ def run_genetic_algorithm(
     """
 ```
 
-> **Urutan Aktivasi Algoritma:**
+> **Prioritas Algoritma Pencarian:**
 > 1. **Grid Search** — metode primer, exhaustive, deterministik.
 > 2. **Bayesian Optimization (Optuna)** — fallback jika satu run Grid Search melebihi 120 menit.
 > 3. **Genetic Algorithm** — alternatif heuristik apabila Bayesian Optimization belum konvergen atau ruang pencarian terlalu besar untuk kedua metode di atas.
@@ -751,7 +751,7 @@ def manual_verification_report(
     """
 ```
 
-### 4.9 Kriteria Keberhasilan Fase 3
+### 4.9 Indikator Output Komponen 3
 
 - Grid Search selesai untuk seluruh 6 kombinasi (2 skenario x 3 objektif) pada data masing-masing.
 - Trial log tersimpan lengkap dalam format Parquet; summary optimal tersimpan dalam JSON dengan field `disclosure` pada Skenario 2.
@@ -762,9 +762,9 @@ def manual_verification_report(
 
 ---
 
-## 5. FASE 4 — Aplikasi Web Interaktif
+## 5. KOMPONEN 4 — Aplikasi Web Interaktif
 
-### 5.1 Tujuan Fase
+### 5.1 Tujuan Komponen
 
 Membangun dan men-deploy aplikasi web publik dengan dua fungsi yang secara konseptual berbeda namun terintegrasi dalam satu platform: (1) simulator backtesting bebas untuk eksplorasi mandiri pengguna, dan (2) halaman hasil penelitian yang menampilkan kedua skenario secara berdampingan dengan framing yang tepat.
 

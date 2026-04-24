@@ -37,7 +37,7 @@ Penelitian ini berlandaskan pada sejumlah kerangka konseptual dan referensi empi
 - Referensi metodologi pemisahan data In-Sample dan Out-of-Sample dalam konteks pengembangan strategi perdagangan yang robust.
 - Kajian mengenai karakteristik siklus makro aset kripto dan implikasinya terhadap frekuensi sinyal perdagangan berbasis indikator on-chain.
 
-Target kajian pustaka pada fase awal penelitian adalah merangkum minimal 5 hingga 7 referensi akademis yang mencakup topik-topik di atas sebagai fondasi argumentasi metodologis.
+Kajian pustaka awal merangkum literatur-literatur akademis yang mencakup topik-topik di atas sebagai fondasi argumentasi metodologis.
 
 ---
 
