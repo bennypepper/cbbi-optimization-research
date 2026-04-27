@@ -15,6 +15,13 @@ Output:
   data/processed/master_dataset.parquet — dataset efisien untuk Fase 2/3
   data/metadata/fill_log.csv            — log baris yang terkena forward fill
   data/metadata/source_notes.md         — dokumentasi sumber dan metodologi
+
+Perubahan metodologi (April 27, 2026):
+  Kolom `trolololo` tidak lagi diambil dari CBBI_dataset.xlsx.
+  Kolom ini sekarang dihitung secara independen menggunakan compute_trolololo()
+  dari modul src/data/trolololo.py, berdasarkan data harga BTC-USD dari yfinance.
+  Ini menghilangkan ketergantungan pada revisi retroaktif indeks CBBI
+  (dikenal sebagai "Index Revision Bias").
 """
 
 import logging
@@ -24,6 +31,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.data.loader import load_cbbi_xlsx, fetch_btc_open, INDICATOR_COLS
+from src.data.trolololo import compute_trolololo
 
 # ── Logging ──────────────────────────────────────────────────────────────────
 logger = logging.getLogger(__name__)
@@ -378,7 +386,7 @@ def _write_source_notes(df: pd.DataFrame) -> None:
 | RHODL | rhodl_ratio | RHODL Ratio |
 | Puell | puell_multiple | Puell Multiple |
 | 2YMA | two_year_ma_mult | 2-Year Moving Average Multiplier |
-| Trolololo | trolololo | Logarithmic Regression / Rainbow Chart |
+| Trolololo | trolololo | **Dihitung independen** — Logarithmic Regression dari btc_close via compute_trolololo() |
 | MVRV | mvrv_zscore | MVRV Z-Score |
 | ReserveRisk | reserve_risk | Reserve Risk |
 | Woobull | woobull | Woobull NVT |
@@ -415,6 +423,13 @@ def _write_source_notes(df: pd.DataFrame) -> None:
 4. **Kolom sinyal default:** `cbbi_confidence` (Composite CBBI Score resmi) 
    digunakan sebagai kolom sinyal default pada mesin optimisasi. Indikator 
    individual juga tersedia untuk eksplorasi di Fase 2.
+
+5. **Trolololo — kalkulasi independen (April 27, 2026):** Kolom `trolololo` 
+   tidak lagi diambil dari CBBI_dataset.xlsx. Nilainya dihitung ulang secara 
+   independen dari data harga BTC-USD (kolom `btc_close`) menggunakan regresi 
+   logaritmik power-law dengan fixed bands (BAND_MIN=-0.6353, BAND_MAX=0.8647). 
+   Ini menghilangkan Index Revision Bias — risiko bahwa nilai historis 
+   berubah saat Colin memperbarui algoritma indeks CBBI secara retroaktif.
 """
     SOURCE_NOTES.write_text(content, encoding="utf-8")
     logger.info("  source_notes.md disimpan ke: %s", SOURCE_NOTES)
@@ -457,6 +472,7 @@ def build_master_dataset(
     """
     logger.info("=" * 60)
     logger.info("FASE 1: Build Master Dataset — MULAI")
+    logger.info("  [UPDATE April 27 2026] trolololo akan dihitung independen")
     logger.info("=" * 60)
 
     # ── Step 1: Load CBBI XLSX ────────────────────────────────────────────────
@@ -474,15 +490,35 @@ def build_master_dataset(
     df = merge_datasets(cbbi_df, btc_open_df, start=start_date, end=end_date)
 
     # ── Step 4: Forward fill ──────────────────────────────────────────────────
-    logger.info("\n[Step 4/6] Apply forward fill")
+    logger.info("\n[Step 4/7] Apply forward fill")
     df = apply_forward_fill(df, max_consecutive_fill=max_fill_days)
 
-    # ── Step 5: Validate no lookahead ─────────────────────────────────────────
-    logger.info("\n[Step 5/6] Validate no-lookahead bias")
+    # ── Step 5: Overwrite trolololo with independent calculation ──────────────
+    # The XLSX-sourced trolololo column is subject to retroactive revision
+    # ("Index Revision Bias"). We replace it with a deterministic value
+    # computed from btc_close using the logarithmic regression power-law.
+    logger.info("\n[Step 5/7] Overwrite trolololo with independent calculation")
+    trololo_computed = compute_trolololo(df["btc_close"])
+    n_before_nan = df["trolololo"].isna().sum()
+    df["trolololo"] = trololo_computed
+    n_after_nan = df["trolololo"].isna().sum()
+    logger.info(
+        "  trolololo overwritten: %d rows | NaN before=%d, after=%d",
+        len(df), n_before_nan, n_after_nan,
+    )
+    # Sanity check: no zeros that look like missing data
+    n_zeros = (df["trolololo"] == 0.0).sum()
+    if n_zeros > 0:
+        logger.warning("  trolololo has %d exact-zero values — review these rows", n_zeros)
+    else:
+        logger.info("  trolololo: no suspicious zero values found")
+
+    # ── Step 6: Validate no lookahead ─────────────────────────────────────────
+    logger.info("\n[Step 6/7] Validate no-lookahead bias")
     validate_no_lookahead(df)
 
-    # ── Step 6: Tag phases ────────────────────────────────────────────────────
-    logger.info("\n[Step 6/6] Tag phases")
+    # ── Step 7: Tag phases ────────────────────────────────────────────────────
+    logger.info("\n[Step 7/7] Tag phases")
     df = tag_phases(df)
 
     # ── Reorder kolom ke urutan final ─────────────────────────────────────────
