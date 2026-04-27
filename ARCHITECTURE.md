@@ -1,8 +1,9 @@
 # System Architecture
 ## CBBI-Based Bitcoin Trading Strategy Optimization
 
-**Version:** 2.0  
-**Status:** Production / Final
+**Version:** 2.1  
+**Status:** Production / Final  
+**Last Updated:** 2026-04-27 — Trolololo signal decoupled from CBBI XLSX (see §2.1)
 
 ---
 
@@ -23,8 +24,9 @@ The architecture is modularized into four core layers:
 The data pipeline aggregates raw data from multiple sources into a single, cohesive master dataset, strictly enforcing anti-lookahead rules.
 
 ### 2.1 Data Sources
-- **CBBI Source (XLSX):** Official daily index values (0-100) and indicator components spanning from 2011 to 2026. 
-- **Market Data (Yahoo Finance):** BTC-USD daily opening prices (`btc_open`), used exclusively for T+1 execution logic to prevent lookahead bias.
+- **CBBI Source (XLSX):** Official daily index values (0-100) and indicator components (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull, cbbi_confidence) spanning from 2011 to 2026.
+- **Trolololo — Independent Calculation *(Updated 2026-04-27)*:** The `trolololo` column is **no longer sourced from the CBBI XLSX**. It is computed independently from BTC-USD closing prices using a logarithmic regression power-law model (`src/data/trolololo.py`). This eliminates *Index Revision Bias* — the risk that Colin's retroactive formula updates silently shift historical signal values. The formula uses a dynamic regression fit with fixed bands (BAND_MIN=−0.6353, BAND_MAX=0.8647), calibrated to match the professor's reference value of 26.7 as of 2026-04-27.
+- **Market Data (Yahoo Finance):** BTC-USD daily opening prices (`btc_open`), used exclusively for T+1 execution logic to prevent lookahead bias. Also used as the source for `btc_close`, which drives the Trolololo calculation.
 
 ### 2.2 Preprocessing Logic
 - **Temporal Alignment:** Both sources are merged using a continuous daily `DatetimeIndex`.

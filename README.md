@@ -43,7 +43,7 @@ Phase 4 ── Interactive Web Dashboard (separate repo)
 
 | Phase | Description | Key Output |
 |---|---|---|
-| **1 — Data Pipeline** | Parse CBBI XLSX + fetch BTC OHLC via yfinance; build lookahead-free master dataset | `data/processed/master_dataset.parquet` |
+| **1 — Data Pipeline** | Parse CBBI XLSX (8 indicators + composite) + independently compute Trolololo from yfinance BTC price data + fetch BTC OHLC; build lookahead-free master dataset | `data/processed/master_dataset.parquet` |
 | **2 — Feature Selection** | Spearman correlation (5 lag windows) + Kruskal-Wallis distribution test; rank all 9 indicators | `analysis/selected_indicators.json` |
 | **3 — Optimization** | Numba-accelerated grid search (1.29M trials × 2 scenarios × 3 objectives); manual backtesting verification | `results/optimal_params_summary.json` |
 
@@ -67,6 +67,8 @@ CBBI_dataset.xlsx   ← place here
 ```
 
 > The dataset contains daily values for all 9 CBBI sub-indicators and their composite score from 2011 to present. It is free and publicly available from the CBBI authors.
+>
+> **Note:** The `trolololo` column in the master dataset is **NOT taken from this XLSX file**. It is computed independently from BTC price data using logarithmic regression (see `src/data/trolololo.py`). This eliminates *Index Revision Bias*. The XLSX is still required for all other 8 indicators.
 
 **Step 2 — BTC Price Data**
 
@@ -97,7 +99,8 @@ cbbi-optimization-research/
 ├── src/
 │   ├── data/
 │   │   ├── loader.py           # CBBI XLSX parser + yfinance BTC price fetcher
-│   │   └── preprocessor.py     # Dataset merge, forward-fill, phase tagging
+│   │   ├── preprocessor.py     # Dataset merge, forward-fill, phase tagging, Trolololo injection
+│   │   └── trolololo.py        # Independent Trolololo calc (logarithmic regression, yfinance)
 │   ├── analysis/
 │   │   └── feature_selector.py # Spearman correlation + Kruskal-Wallis + ranking
 │   └── optimization/
@@ -207,7 +210,8 @@ Three independent objectives per scenario:
 
 | Data | Source | Access |
 |---|---|---|
-| CBBI indicators (all 9) + composite score | [cbbi.info](https://cbbi.info) — official CBBI dataset | Free, manual download |
+| 8 CBBI indicators (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull) + composite score | [cbbi.info](https://cbbi.info) — official CBBI dataset | Free, manual download |
+| **Trolololo** *(updated 2026-04-27)* | Computed independently via `src/data/trolololo.py` from BTC-USD daily close prices (yfinance). Eliminates Index Revision Bias. | Free, auto-computed |
 | BTC daily open/close prices | [Yahoo Finance](https://finance.yahoo.com) via `yfinance` | Free, auto-fetched |
 
 > ⚠️ **Dataset Snapshot Notice:** The CBBI dataset used in this research is a **static snapshot** taken at the time of Phase 1 pipeline execution. The ColintalksCrypto API retroactively updates its historical values when the index formula changes. Results from this repository are reproducible only against the frozen `master_dataset.parquet`, not against a live API query of the same date range. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).

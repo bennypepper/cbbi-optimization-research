@@ -2,7 +2,7 @@
 ## CBBI Optimization Research — Methodology Revision
 
 **Created:** April 27, 2026  
-**Status:** 🟢 PHASE 1 COMPLETE — `src/data/trolololo.py` built and calibrated. Proceed to Step 2.  
+**Status:** 🟡 PHASES 1–3 COMPLETE. Steps 4–7 pending (webapp migration). Step 8 (PKL_v4 docs) done.  
 **CBBI Dataset capture date confirmed:** Monday, March 16, 2026 (last data row: 2026-03-15)  
 **Repos involved:**
 - Research: `D:\Personal Projects\PKL_v4` (GitHub: `bennypepper/cbbi-optimization-research`)
@@ -121,9 +121,10 @@ The CBBI API (`colintalkscrypto.com/cbbi/data/latest.json`) returned a `406 Not 
 ---
 
 ### Step 0 — Clean Up Temp Files
-Delete the diagnostic script created during investigation:
+**Status: DONE ✅ — Deleted on 2026-04-27**  
+Deleted the diagnostic script created during investigation:
 ```
-D:\Personal Projects\PKL_v4\check_data.py  ← delete this
+D:\Personal Projects\PKL_v4\check_data.py  ← deleted
 ```
 
 ---
@@ -160,31 +161,35 @@ Date       | Trolololo | BTC Price
 ---
 
 ### Step 2 — Rebuild master_dataset.parquet
-**File to modify:** `PKL_v4/src/data/preprocessor.py` (the `build_master_dataset()` function)
+**Status: DONE ✅ — Committed to `main` on 2026-04-27**  
+**File modified:** `PKL_v4/src/data/preprocessor.py`
 
-Changes:
-1. Remove dependency on `CBBI_dataset.xlsx` for the `trolololo` column
-2. Keep using `CBBI_dataset.xlsx` for: `cbbi_confidence`, `pi_cycle`, `rupl`, `rhodl_ratio`, `puell_multiple`, `two_year_ma_mult`, `mvrv_zscore`, `reserve_risk`, `woobull` (these are still used in Phase 2 analysis documentation context — they're not used as the signal, but they're in the dataset)
-3. Call `compute_trolololo()` using the yfinance BTC price data
-4. Overwrite the `trolololo` column in the master dataset with the freshly computed values
-5. Re-save `data/processed/master_dataset.parquet`
+Changes implemented:
+1. Added `from src.data.trolololo import compute_trolololo` import
+2. Added Step 5/7 inside `build_master_dataset()` that calls `compute_trolololo(df['btc_close'])` and overwrites the XLSX-sourced `trolololo` column
+3. Added zero-value sanity check (logged as warning if any zeros detected)
+4. `CBBI_dataset.xlsx` still used for all other 8 indicator columns
+5. Re-ran preprocessor — output: 5,161 rows, 2012-01-01 to 2026-03-15
 
-> ⚠️ Keep `CBBI_dataset.xlsx` as a source for all OTHER indicators — only `trolololo` is being replaced. The XLSX is still needed.
+**Key fix:** `2023-01-01` trolololo value corrected: was `0.00` (XLSX data bug) → now `18.44` (independent calc)
+**Zero values remaining:** 19 rows in 2012–2013 era (BTC at $5–15), legitimately near-zero — not bugs.
 
 ---
 
 ### Step 3 — Re-run Phase 3 Grid Search Optimization
-**Files involved:** `PKL_v4/src/optimization/` (engine.py, run scripts)
+**Status: DONE ✅ — Committed to `main` on 2026-04-27**
 
-With the corrected `master_dataset.parquet`:
-1. Delete old trial logs: `results/trial_log/*.parquet`
-2. Re-run Scenario 1 (In-Sample optimization, then OOS forward test) for all 3 objectives
-3. Re-run Scenario 2 (Full dataset optimization) for all 3 objectives
-4. New `results/optimal_params_summary.json` will be generated
+Completed:
+1. Deleted old trial logs: `results/trial_log/scenario_1_grid_search_in_sample.parquet` and `scenario_2_grid_search_full.parquet`
+2. Re-ran Scenario 1 (In-Sample optimization, then OOS forward test) — 21 seconds
+3. Re-ran Scenario 2 (Full dataset optimization) — 13 seconds
+4. New `results/optimal_params_summary.json` generated (2026-04-27 19:57:19)
 
-Expected runtime: ~19 seconds per run × 6 runs ≈ 2 minutes total (Numba JIT)
+**New optimal parameters:**
+- Scenario 1 Max Return: Buy=30, Sell=79, 25%/25%
+- Scenario 2 Max Return: Buy=27, Sell=79, 25%/25%
 
-**Important:** Before running, verify that the `trolololo` column in the new `master_dataset.parquet` has no zero or null values (especially around 2023-01-01 which had `0.00` before).
+> Note: Parameters shifted slightly from the original (was Buy=35, Sell=55) due to corrected Trolololo values. This is expected — the 2023-01-01 zero-value bug in the old data skewed the signal distribution.
 
 ---
 

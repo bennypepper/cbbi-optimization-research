@@ -105,8 +105,11 @@ Fase 4 ── Aplikasi Web Interaktif (cbbi-dashboard)
 
 | Data | Sumber | Cakupan |
 |---|---|---|
-| Seluruh 9 indikator CBBI + Composite Score | `cbbi.info` (file XLSX resmi) | 2011-06-27 – 2026-03-15 (5.376 baris asli) |
+| 8 indikator CBBI (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull) + Composite Score | `cbbi.info` (file XLSX resmi) | 2011-06-27 – 2026-03-15 (5.376 baris asli) |
+| **Trolololo** *(diperbarui 2026-04-27)* | **Dihitung independen** dari `btc_close` via `src/data/trolololo.py` | Seluruh rentang dataset |
 | Harga BTC open harian (eksekusi T+1) | `yfinance` ticker BTC-USD | 2012-01-01 – 2026-03-31 |
+
+> **Pembaruan Metodologi (April 27, 2026):** Kolom `trolololo` tidak lagi diambil dari CBBI_dataset.xlsx. Setelah diskusi dengan pembimbing, diputuskan bahwa Trolololo dihitung secara independen dari data harga BTC-USD menggunakan regresi logaritmik power-law, karena formula ini tidak bergantung pada sistem CBBI. Ini mengeliminasi *Index Revision Bias* — risiko nilai historis bergeser saat Colin memperbarui formula CBBI secara retroaktif. Dataset diregenerasi dan grid search diulang pada 2026-04-27. Hasil penelitian (parameter optimal) tetap konsisten dengan temuan sebelumnya.
 
 > **Catatan filter start date:** Dataset XLSX asli mencakup 5.376 baris (mulai 2011-06-27). Penelitian menggunakan 2012-01-01 sebagai titik awal (membuang 215 baris dari 2011), karena era awal Bitcoin 2011 memiliki volatilitas ekstrem yang tidak representatif dan belum memiliki data CBBI yang lengkap. Keputusan ini konsisten dengan literatur yang umumnya memulai analisis Bitcoin setelah periode pembentukan awal (lihat `data/metadata/source_notes.md`).
 
@@ -119,7 +122,7 @@ Fase 4 ── Aplikasi Web Interaktif (cbbi-dashboard)
 | `RHODL` | `rhodl_ratio` | RHODL Ratio |
 | `Puell` | `puell_multiple` | Puell Multiple |
 | `2YMA` | `two_year_ma_mult` | 2-Year Moving Average Multiplier |
-| `Trolololo` | `trolololo` | Logarithmic Regression / Rainbow Chart |
+| `Trolololo` | `trolololo` | **Dihitung independen** — Logarithmic Regression / Rainbow Chart (lihat pembaruan metodologi di atas) |
 | `MVRV` | `mvrv_zscore` | MVRV Z-Score |
 | `ReserveRisk` | `reserve_risk` | Reserve Risk |
 | `Woobull` | `woobull` | Woobull NVT |
@@ -654,9 +657,9 @@ Audit menjalankan tournament 18 konfigurasi challenger untuk memvalidasi keunggu
 
 | Fase | Status | Output Utama | Dibuat |
 |---|---|---|---|
-| Fase 1 | ✅ Selesai | `master_dataset.parquet` (5.161 hari, tervalidasi) | 2026-04-09 |
+| Fase 1 | ✅ Selesai | `master_dataset.parquet` (5.161 hari, tervalidasi) | 2026-04-09; diperbarui 2026-04-27 (Trolololo independen) |
 | Fase 2 | ✅ Selesai | `selected_indicators.json`, Trolololo terpilih | 2026-04-09 |
-| Fase 3 | ✅ Selesai | `optimal_params_summary.json`, 6 run grid search | 2026-04-09 |
+| Fase 3 | ✅ Selesai | `optimal_params_summary.json`, 6 run grid search | 2026-04-09; diulang 2026-04-27 (dataset baru) |
 | Fase 4 | ✅ Selesai | Web app live, Index Revision Bias terdokumentasi | 2026-04-17 |
 
 ---
