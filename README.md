@@ -87,7 +87,8 @@ python -c "from src.analysis.feature_selector import run_full_analysis; run_full
 python src/optimization/run_phase3.py
 
 # Phase 3 — Interactive CLI for manual backtest verification
-python src/optimization/verify_manual.py
+# Supports [1] Historical parquet or [2] Live yfinance + independent Trolololo
+python -m src.optimization.verify_manual
 ```
 
 ---
