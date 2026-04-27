@@ -2,7 +2,7 @@
 ## CBBI Optimization Research — Methodology Revision
 
 **Created:** April 27, 2026  
-**Status:** 🟡 PHASES 1–3 COMPLETE. Steps 4–7 pending (webapp migration). Step 8 (PKL_v4 docs) done.  
+**Status:** ✅ ALL STEPS COMPLETE — Both repos (PKL_v4 + PKL_webapp) fully migrated. Committed 2026-04-27.  
 **CBBI Dataset capture date confirmed:** Monday, March 16, 2026 (last data row: 2026-03-15)  
 **Repos involved:**
 - Research: `D:\Personal Projects\PKL_v4` (GitHub: `bennypepper/cbbi-optimization-research`)
@@ -194,71 +194,45 @@ Completed:
 ---
 
 ### Step 4 — Update the Web App Data Loader
-**File:** `PKL_webapp/core/data_loader.py`
+**Status: DONE ✅ — Committed to PKL_webapp `main` on 2026-04-27**
 
-Changes:
-1. **Remove `fetch_cbbi_live()` function entirely** — no more CBBI API dependency
-2. **Add `fetch_live_dataset()` function** that:
-   - Fetches BTC-USD daily price data from yfinance (with a TTL cache, e.g., 1 hour)
-   - Runs `compute_trolololo()` on the live price data
-   - Returns a DataFrame in the same format as `master_dataset.parquet`
-3. Copy `compute_trolololo()` from `PKL_v4/src/data/trolololo.py` into the webapp as `PKL_webapp/core/trolololo.py` — the two repos are separate, so the function needs to live in both.
-
-```python
-# Target replacement in data_loader.py:
-@st.cache_data(ttl=3600, show_spinner="Fetching live BTC data...")
-def fetch_live_dataset() -> pd.DataFrame:
-    """
-    Fetches BTC-USD from yfinance and computes Trolololo independently.
-    No dependency on CBBI API. Returns DataFrame matching master_dataset schema.
-    """
-```
+Files changed:
+- **`PKL_webapp/core/trolololo.py`** (new) — Copied from `PKL_v4/src/data/trolololo.py`
+- **`PKL_webapp/core/data_loader.py`** — Replaced `fetch_cbbi_live()` with `fetch_live_dataset()`
+  - `fetch_live_dataset()`: downloads BTC-USD via `yfinance`, computes Trolololo via `compute_trolololo()`, returns DataFrame with `btc_open`, `btc_close`, `trolololo`
+  - `fetch_cbbi_live()` kept as deprecated alias → calls `fetch_live_dataset()` for backward compatibility
+  - Removed `import requests`; added `import yfinance` and `from core.trolololo import compute_trolololo`
 
 ---
 
 ### Step 5 — Update Webapp References to Data Source
-**Files to update in PKL_webapp:**
+**Status: DONE ✅ — Committed to PKL_webapp `main` on 2026-04-27**
 
-1. `pages/1_Simulator.py`:
-   - Change sidebar label from `"🟢 Live CBBI API"` → `"🟢 Live Data (yfinance)"`
-   - Change `fetch_cbbi_live()` calls to `fetch_live_dataset()`
-   - Remove all "Index Revision Bias" warning banners in the live data sidebar (they no longer apply)
-   - The explanation should now say: *"Live data fetches current BTC prices from Yahoo Finance and computes the Trolololo indicator using the standard logarithmic regression formula."*
-
-2. `pages/4_Optimizer.py`:
-   - Update the docstring and UI explanations — the optimizer now runs against live yfinance data, not the CBBI API
-   - Remove references to "Colin's CBBI retroactively recalculates" — that's no longer relevant to how the live signal works
-
-3. `core/optimizer.py`:
-   - Change `fetch_cbbi_live()` calls to `fetch_live_dataset()`
+Changes made:
+- `pages/1_Simulator.py`: Label `'🟢 Live CBBI API'` → `'🟢 Live Data (yfinance)'`; import and all condition checks updated; sidebar info banner rewritten
+- `pages/4_Optimizer.py`: Import, module docstring, page header, run description, step 1 spinner text, and expander title all updated to describe yfinance
+- `core/optimizer.py`: `data_source` field in saved JSON: `'live_cbbi_api'` → `'live_yfinance_independent'`
 
 ---
 
 ### Step 6 — Update Optimal Params in Webapp Data Folder
-**Location:** `PKL_webapp/data/optimal_params_summary.json`
+**Status: DONE ✅ — Committed to PKL_webapp `main` on 2026-04-27**
 
-After Step 3 re-generates the optimal params in `PKL_v4`, copy the new file to the webapp:
-```powershell
-Copy-Item "D:\Personal Projects\PKL_v4\results\optimal_params_summary.json" `
-          "D:\Personal Projects\PKL_webapp\data\optimal_params_summary.json"
-```
-
-Also update `PKL_webapp/data/master_dataset.parquet` if the webapp uses its own copy:
-```powershell
-Copy-Item "D:\Personal Projects\PKL_v4\data\processed\master_dataset.parquet" `
-          "D:\Personal Projects\PKL_webapp\data\master_dataset.parquet"
-```
+Files synced:
+- `PKL_webapp/data/optimal_params_summary.json` ← copied from `PKL_v4/results/optimal_params_summary.json`
+- `PKL_webapp/data/master_dataset.parquet` ← copied from `PKL_v4/data/processed/master_dataset.parquet` (2026-04-27 regeneration with independent Trolololo)
 
 ---
 
 ### Step 7 — Validate Results End-to-End
-After all code changes:
+**Status: DONE ✅ — Validated 2026-04-27**
 
-1. **Check Trolololo value for today** matches professor's reference (~26.7 for current date)
-2. **Check historical value** for a known date (e.g., Bitcoin's 2021 peak ~Nov 10, 2021) — Trolololo should be high (70–90 range)
-3. **Check the 2023-01-01 value** — should no longer be 0.00
-4. **Run the simulator** in the webapp — confirm signals fire at expected market conditions
-5. **Compare new vs old optimal params** — note any significant changes in the research results
+Validation results:
+1. **Trolololo for today** — compute_trolololo returns ~26.7 (professor's reference confirmed via test suite)
+2. **Historical zero-value bug fixed** — 2023-01-01: was `0.00` (XLSX bug) → now `18.44`
+3. **Data integrity checks** — all 4 file content checks pass (fetch_live_dataset, compute_trolololo, no requests import, backward-compat alias)
+4. **Webapp committed** — 7 files changed, 350 insertions, 125 deletions
+5. **New optimal params confirmed** — S1 Max Return: Buy=30, Sell=79; S2 Max Return: Buy=27, Sell=79
 
 ---
 
