@@ -463,7 +463,7 @@ Aplikasi web dilengkapi **Dynamic Grid Search Updater**:
 
 ### 9.6 Narasi Draft untuk Bab Keterbatasan (PKL)
 
-> *Penelitian ini menggunakan dataset CBBI snapshot statis yang diunduh pada atau sekitar **2026-03-15** (tanggal terakhir data dalam file: 2026-03-15). Perlu diketahui bahwa indeks CBBI bersifat dinamis: penulis Colin Talks Crypto secara berkala memperbarui bobot dan komponen formula, dan pembaruan tersebut berlaku retroaktif pada seluruh histori data yang disajikan melalui API resmi. Konsekuensinya, parameter threshold dan alokasi yang diidentifikasi sebagai optimal dalam penelitian ini secara spesifik optimal terhadap distribusi sinyal versi formula CBBI yang digunakan saat penelitian. Fenomena ini sejalan dengan konsep index revision bias dalam literatur ekonometrika.*
+> *Penelitian ini menggunakan dataset CBBI snapshot statis yang diunduh pada **Senin, 16 Maret 2026** (tanggal terakhir data dalam file: 2026-03-15). Perlu diketahui bahwa indeks CBBI bersifat dinamis: penulis Colin Talks Crypto secara berkala memperbarui bobot dan komponen formula, dan pembaruan tersebut berlaku retroaktif pada seluruh histori data yang disajikan melalui API resmi. Konsekuensinya, parameter threshold dan alokasi yang diidentifikasi sebagai optimal dalam penelitian ini secara spesifik optimal terhadap distribusi sinyal versi formula CBBI yang digunakan saat penelitian. Fenomena ini sejalan dengan konsep index revision bias dalam literatur ekonometrika.*
 
 ---
 

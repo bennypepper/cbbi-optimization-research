@@ -2,7 +2,8 @@
 ## CBBI Optimization Research — Methodology Revision
 
 **Created:** April 27, 2026  
-**Status:** 🔴 PENDING — Blocked on professor's normalization formula  
+**Status:** 🟡 IN PROGRESS — Normalization confirmed as **fixed bands**. Pending: professor's exact coefficients or reference implementation (to validate against 26.7 target value).  
+**CBBI Dataset capture date confirmed:** Monday, March 16, 2026 (last data row: 2026-03-15)  
 **Repos involved:**
 - Research: `D:\Personal Projects\PKL_v4` (GitHub: `bennypepper/cbbi-optimization-research`)
 - Web App: `D:\Personal Projects\PKL_webapp` (GitHub: `bennypepper/cbbi-strategy-lab`)
@@ -14,7 +15,7 @@
 The original research pipeline (Phases 1–4) was completed as follows:
 
 1. **Phase 1 (Data Pipeline):** A `master_dataset.parquet` was built by merging two sources:
-   - `CBBI_dataset.xlsx` — downloaded manually from [cbbi.info](https://cbbi.info), a frozen snapshot captured in March 2026. This file contained all CBBI sub-indicators including `trolololo`, `cbbi_confidence`, `pi_cycle`, `rupl`, etc., all pre-normalized to 0–100 by Colin's system.
+   - `CBBI_dataset.xlsx` — downloaded manually from [cbbi.info](https://cbbi.info) on **Monday, March 16, 2026** (confirmed by researcher). The file's last data row is `2026-03-15`. This file contained all CBBI sub-indicators including `trolololo`, `cbbi_confidence`, `pi_cycle`, `rupl`, etc., all pre-normalized to 0–100 by Colin's system.
    - `yfinance` BTC-USD daily data — specifically the `btc_open` column (next-day open price), used exclusively for T+1 trade execution to avoid lookahead bias.
 
 2. **Phase 2 (Indicator Selection):** Spearman rank correlation was run on the In-Sample period (2012–2020) across 5 lag windows (7, 14, 30, 60, 90 days). All indicators were ranked. **Trolololo ranked #1** with composite score `0.6557` and best Spearman rho of `-0.4261` at 90-day lag. Results are stored in:
@@ -42,7 +43,7 @@ After presenting findings to the supervising professor, the following methodolog
 The CBBI index is **not static**. Colin (the CBBI creator) periodically updates his algorithm — adding, removing, or reweighting sub-indicators — and retroactively recalculates the entire history back to 2011. This is documented in the research as **"Index Revision Bias."**
 
 This means:
-- The `trolololo` values in `CBBI_dataset.xlsx` (frozen March 2026) may not match what the live API returns today.
+- The `trolololo` values in `CBBI_dataset.xlsx` (downloaded Monday, March 16, 2026; last data row: 2026-03-15) may not match what the live API returns today.
 - Any strategy parameters optimized against the frozen snapshot may be suboptimal against the live data.
 
 ### 2.2 Professor's Directive
