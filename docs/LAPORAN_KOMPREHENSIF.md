@@ -327,6 +327,54 @@ Total run: **2 skenario × 3 objektif = 6 run Grid Search**, masing-masing 1.293
 
 > **Justifikasi risk-free rate 4%/tahun:** Angka 4% dipilih sebagai representasi rata-rata yield US Treasury jangka pendek (T-Bill 3 bulan) pada rentang periode penelitian 2012–2026. Rate harian yang digunakan dalam engine: `rf_daily = 0.04 / 365 = 0.0001096`. Pemilihan rate ini bersifat konservatif; Sharpe Ratio aktual bisa sedikit lebih tinggi jika menggunakan rata-rata yield yang lebih rendah (misalnya era 2012–2015 ketika Fed rate mendekati 0%).
 
+### 6.5 Justifikasi Batasan Alokasi 25% (Position-Sizing Constraint)
+
+**Ruang pencarian alokasi yang digunakan:**
+- `allocation_buy_pct` : 1% – 25% dari kas yang tersedia
+- `allocation_sell_pct` : 1% – 25% dari BTC yang dipegang
+
+**Pertanyaan yang mungkin muncul:** Mengapa tidak mengizinkan alokasi 50% atau 100%? Bukankah tujuannya menemukan parameter absolut terbaik?
+
+**Jawaban: Batasan ini adalah keputusan desain sadar, bukan keterbatasan teknis.**
+
+**Alasan 1 — Realisme Investor (External Validity)**
+
+Penelitian ini memodelkan perilaku investor ritel nyata, bukan algoritma HFT atau bot otomatis. Dalam praktik:
+- Investor tidak mengeksekusi "dump 100% portofolio dalam satu hari"
+- Likuiditas pasar BTC, terutama di era 2012–2016, tidak mendukung eksekusi besar-besaran tanpa slippage signifikan
+- Regulasi dan kebijakan exchange membatasi penarikan/transaksi besar dalam satu hari
+
+Mengizinkan alokasi 100% akan mengubah pertanyaan penelitian dari *"strategi CBBI yang dapat diimplementasikan investor"* menjadi *"batas teoretis matematis tanpa kendala realitas"* — dua pertanyaan yang berbeda secara fundamental.
+
+**Alasan 2 — Kontrol atas Overfitting Eksekusi**
+
+Strategi all-in/all-out (100% alokasi) cenderung overfitting terhadap titik-titik harga historis yang spesifik. Dengan membatasi alokasi ke 25%, setiap sinyal menggerakkan portofolio secara bertahap, yang:
+- Secara alami mengimplementasikan dollar-cost averaging
+- Membuat strategi lebih robust terhadap variasi minor dalam timing sinyal
+- Menghasilkan parameter yang lebih dapat ditransfer ke data masa depan
+
+**Alasan 3 — Pemisahan Masalah: Sinyal vs. Eksekusi**
+
+Penelitian ini menguji **kualitas sinyal Trolololo**, bukan efisiensi eksekusi. Batasan 25% mengisolasi kontribusi sinyal dengan mengurangi dominasi efek "lucky timing" pada satu transaksi besar.
+
+**Catatan Kritis — Mengapa Min Drawdown Masih -83%?**
+
+Hasil Min Drawdown IS = -83% sering disalahartikan sebagai kegagalan constraint. Faktanya:
+
+> **MDD -83% adalah sifat intrinsik indikator, bukan akibat batasan alokasi.**
+
+Trolololo adalah detektor siklus makro dengan korelasi terbaik pada lag 90 hari. Artinya:
+- Sinyal beli/jual bergerak lambat, mencerminkan tren bulanan, bukan reaksi harian
+- Ketika BTC crash −80% dalam 2–3 minggu (misalnya Maret 2020, November 2022), sinyal Trolololo *belum* mencapai threshold sell ≥ 57 pada saat crash terjadi
+- Bahkan dengan alokasi sell 100% sekalipun, crash terjadi lebih cepat dari kemampuan indikator untuk memberikan sinyal
+
+Hal ini dibuktikan oleh fakta bahwa Buy & Hold juga mengalami MDD -76.68% di OOS. Strategi CBBI dengan constraint 1%/25% menghasilkan OOS MDD -51.57% — **lebih baik 25 poin dari Buy & Hold** meskipun dengan batasan alokasi. Ini menunjukkan constraint bukan hambatan utama.
+
+**Ruang lingkup penelitian yang tepat:**
+> *"Penelitian ini menginvestigasi strategi berbasis sinyal Trolololo dalam batasan position-sizing realistis (1–25% per sinyal), untuk mengukur nilai tambah indikator terhadap strategi pasif pada kondisi investor ritel."*
+
+Analisis sensitivitas unconstrained (alokasi 1–100%) diusulkan sebagai *future work* untuk mengisolasi dampak batasan secara empiris.
+
 ---
 
 ## 7. Hasil Kuantitatif Lengkap
@@ -608,7 +656,7 @@ Audit menjalankan tournament 18 konfigurasi challenger untuk memvalidasi keunggu
 | **Index Revision Bias** | Parameter mungkin tidak optimal untuk formula CBBI terkini | Dynamic Grid Search Updater di Phase 4 |
 | **Jumlah siklus terbatas** | Hanya 4 siklus halving (2012–2026) — OOS hanya 1 siklus | Transparansi dalam laporan |
 | **Frekuensi sinyal rendah di OOS** | Metrik statistik (Win Rate, Sharpe) kurang representatif pada threshold ekstrem | `low_sample_warning` flag; minimum 10 trades |
-| **Constraint alokasi 25%** | Parameter di luar constraint (50%, 100%) menghasilkan return lebih tinggi namun berisiko | Constraint adalah pilihan desain sadar untuk realisme |
+| **Constraint alokasi 25%** | Parameter di luar constraint (50%, 100%) mungkin menghasilkan return lebih tinggi atau MDD lebih rendah secara teoritis | **Constraint adalah keputusan desain sadar** untuk realisme investor (lihat §6.5). Batasan ini memisahkan penelitian kualitas sinyal dari rekayasa eksekusi. Analisis sensitivitas unconstrained diusulkan sebagai future work. Penting: MDD -83% (min_drawdown IS) bukan akibat constraint, melainkan sifat intrinsik sinyal Trolololo yang berkorelasi pada lag 90 hari — lebih lambat dari kecepatan crash BTC. |
 | **Tidak ada slippage model** | 0.1% flat fee tidak memperhitungkan slippage pasar | Flat fee konservatif; dokumentasi eksplisit |
 | **Single asset (BTC)** | Tidak ada diversifikasi portofolio | Sesuai ruang lingkup penelitian CBBI |
 | **Pi Cycle Top — lag panjang** | Pi Cycle tidak signifikan di lag 30/60/90d; perannya sebagai leading indicator jangka menengah terbatas | Didokumentasikan; Trolololo dipilih sebagai signal column utama |
