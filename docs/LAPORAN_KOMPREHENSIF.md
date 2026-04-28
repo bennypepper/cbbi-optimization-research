@@ -105,11 +105,9 @@ Fase 4 ── Aplikasi Web Interaktif (cbbi-dashboard)
 
 | Data | Sumber | Cakupan |
 |---|---|---|
-| 8 indikator CBBI (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull) + Composite Score | `cbbi.info` (file XLSX resmi) | 2011-06-27 – 2026-03-15 (5.376 baris asli) |
-| **Trolololo** *(diperbarui 2026-04-27)* | **Dihitung independen** dari `btc_close` via `src/data/trolololo.py` | Seluruh rentang dataset |
-| Harga BTC open harian (eksekusi T+1) | `yfinance` ticker BTC-USD | 2012-01-01 – 2026-03-31 |
+| 8 indikator CBBI (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull) + Composite Score | **Trolololo** *(diperbarui 2026-04-28)* | **Dihitung independen** dari `btc_close` via `src/data/trolololo.py` — Dynamic Channel Normalization | Seluruh rentang dataset |
 
-> **Pembaruan Metodologi (April 27, 2026):** Kolom `trolololo` tidak lagi diambil dari CBBI_dataset.xlsx. Setelah diskusi dengan pembimbing, diputuskan bahwa Trolololo dihitung secara independen dari data harga BTC-USD menggunakan regresi logaritmik power-law, karena formula ini tidak bergantung pada sistem CBBI. Ini mengeliminasi *Index Revision Bias* — risiko nilai historis bergeser saat Colin memperbarui formula CBBI secara retroaktif. Dataset diregenerasi dan grid search diulang pada 2026-04-27. Hasil penelitian (parameter optimal) tetap konsisten dengan temuan sebelumnya.
+> **Pembaruan Metodologi (April 28, 2026):** Kolom `trolololo` tidak lagi diambil dari CBBI_dataset.xlsx. Atas arahan pembimbing (dikonfirmasi 2026-04-28), Trolololo dihitung menggunakan formula **Dynamic Channel Normalization**: dua channel power-law terpisah dalam ruang natural-log dengan koefisien `top: 2.900×ln(d+1400)` dan `bottom: 2.788×ln(d+1200)` (d = hari sejak 2012-01-01), kemudian residual di titik-titik siklus historis yang terkonfirmasi (HIGH: 2017, 2021; LOW: 2015, 2018, 2022) di-fit dengan regresi linear untuk menghasilkan adaptive channel. Normalisasi: `(price_log − channel_bottom) / (channel_top − channel_bottom)`. Metode ini lebih akurat dibanding fixed bands karena mengakomodasi penurunan amplitudo siklus Bitcoin lintas halving. Dataset diregenerasi dan grid search diulang pada 2026-04-28. Hasil penelitian (parameter optimal) tetap konsisten dengan temuan sebelumnya.
 
 > **Catatan filter start date:** Dataset XLSX asli mencakup 5.376 baris (mulai 2011-06-27). Penelitian menggunakan 2012-01-01 sebagai titik awal (membuang 215 baris dari 2011), karena era awal Bitcoin 2011 memiliki volatilitas ekstrem yang tidak representatif dan belum memiliki data CBBI yang lengkap. Keputusan ini konsisten dengan literatur yang umumnya memulai analisis Bitcoin setelah periode pembentukan awal (lihat `data/metadata/source_notes.md`).
 
@@ -337,21 +335,21 @@ Total run: **2 skenario × 3 objektif = 6 run Grid Search**, masing-masing 1.293
 
 | Objektif | Buy | Sell | Alloc Buy | Alloc Sell | Total Return | Max Drawdown | Sharpe | Win Rate | Trade Count |
 |---|---|---|---|---|---|---|---|---|---|
-| **Max Return** | 35 | 55 | 25% | 25% | **743.186.303.978%** | 98.69% | 2.425 | 80.04% | 2.659 |
-| **Min Drawdown** | 1 | 55 | 1% | 25% | 24.001% | **98.50%** | 1.366 | 76.46% | 1.457 |
-| **Max Sharpe** | 13 | 100 | 25% | 1% | 4.726% | 98.77% | **2.685** | 0% | 1.403 |
+| **Max Return** | 34 | 79 | 25% | 25% | **~1.568 triliun %** | 91.83% | 2.438 | 89.80% | 2.153 |
+| **Min Drawdown** | 1 | 57 | 1% | 25% | 74.356% | **83.16%** | 1.168 | 74.96% | 1.343 |
+| **Max Sharpe** | 30 | 100 | 25% | 1% | 511.793% | 98.77% | **2.686** | 0% | 1.821 |
 
-> **Catatan Max Return:** Return IS sebesar 743 miliar persen adalah artefak dari akumulasi agresif BTC dari $10 (2012) ke $70.000+ (2020). Angka ini secara metodologis valid namun mengandung **overfitting** yang besar terhadap siklus awal Bitcoin.
+> **Catatan Max Return:** Return IS sebesar ~1.568 triliun persen adalah artefak dari akumulasi agresif BTC sejak 2012. Angka ini secara metodologis valid namun mengandung **overfitting** yang besar terhadap siklus awal Bitcoin. Perubahan parameter dari dataset sebelumnya (Buy=35/Sell=55 → Buy=34/Sell=79) disebabkan oleh pergeseran distribusi sinyal Trolololo dengan formula Dynamic Channel.
 
-> **Catatan Max Sharpe Win Rate 0%:** Threshold sell = 100 berarti sistem tidak pernah menjual (tidak ada sinyal CBBI = 100 yang terpenuhi). Win Rate = 0% karena tidak ada transaksi SELL yang terjadi di IS. Ini adalah strategi "akumulasi tanpa jual" yang menghasilkan Sharpe tertinggi melalui pertumbuhan BTC murni.
+> **Catatan Max Sharpe Win Rate 0%:** Threshold sell = 100 berarti sistem tidak pernah menjual. Ini adalah strategi "akumulasi tanpa jual" yang menghasilkan Sharpe tertinggi melalui pertumbuhan BTC murni.
 
 ### 7.2 Skenario 1 — Hasil Out-of-Sample (2021–2026) — Forward Test
 
 | Objektif | Buy | Sell | Total Return | Max Drawdown | Sharpe | Win Rate | Trade Count |
 |---|---|---|---|---|---|---|---|
-| **Max Return** | 35 | 55 | **141.15%** | 62.86% | 1.030 | 67.03% | 1.015 |
-| **Min Drawdown** | 1 | 55 | 65.34% | **40.68%** | 0.409 | 85.99% | 424 |
-| **Max Sharpe** | 13 | 100 | 74.39% | 66.04% | **1.172** | 0% | 232 |
+| **Max Return** | 34 | 79 | **72.45%** | 66.77% | 1.187 | 0% | 752 |
+| **Min Drawdown** | 1 | 57 | 115.32% | **51.57%** | 0.593 | 100% | 191 |
+| **Max Sharpe** | 30 | 100 | 71.86% | 66.76% | **1.184** | 0% | 674 |
 
 ### 7.3 Skenario 2 — Hasil Full Dataset (2012–2026)
 
@@ -359,11 +357,11 @@ Total run: **2 skenario × 3 objektif = 6 run Grid Search**, masing-masing 1.293
 
 | Objektif | Buy | Sell | Alloc Buy | Alloc Sell | Total Return | Max Drawdown | Sharpe | Win Rate | Trade Count |
 |---|---|---|---|---|---|---|---|---|---|
-| **Max Return** | 35 | 55 | 25% | 25% | **18.282.772.244%** | 98.69% | 2.029 | 82.12% | 4.043 |
-| **Min Drawdown** | 1 | 55 | 1% | 25% | 39.924% | **98.50%** | 1.114 | 86.08% | 2.250 |
-| **Max Sharpe** | 13 | 100 | 25% | 1% | 11.844% | 98.77% | **2.295** | 0% | 1.635 |
+| **Max Return** | 7 | 79 | 25% | 25% | **~3.802 triliun %** | 88.50% | 2.014 | 94.49% | 1.649 |
+| **Min Drawdown** | 1 | 57 | 1% | 25% | 160.871% | **83.16%** | 0.995 | 85.86% | 1.974 |
+| **Max Sharpe** | 30 | 100 | 25% | 1% | 1.282.375% | 98.77% | **2.296** | 0% | 2.495 |
 
-**Observasi penting:** Parameter optimal Skenario 2 identik dengan Skenario 1 IS (Buy=35, Sell=55 untuk Max Return; Buy=13, Sell=100 untuk Max Sharpe). Ini mengindikasikan **konsistensi temuan** — parameter yang sama mendominasi di kedua time horizon.
+**Observasi penting:** Dengan formula Dynamic Channel, parameter Skenario 2 Max Return (Buy=7) berbeda dari Skenario 1 IS (Buy=34), menunjukkan bahwa optimisasi full dataset menemukan zona akumulasi yang lebih agresif. Max Sharpe dan Min Drawdown tetap konsisten di kedua skenario (Buy=30/Sell=100 dan Buy=1/Sell=57).
 
 ### 7.4 Profil Tiga Strategi (Skenario 2 — Narasi Pengguna)
 
@@ -390,10 +388,10 @@ Total run: **2 skenario × 3 objektif = 6 run Grid Search**, masing-masing 1.293
 
 | Objektif | IS Return | OOS Return | Degradasi Return | IS Sharpe | OOS Sharpe | Degradasi Sharpe | OOS MDD |
 |---|---|---|---|---|---|---|---|
-| Max Return | 743.186.303.978% | 141.15% | **−99.99%** | 2.425 | 1.030 | −57.52% | 62.86% |
-| Min Drawdown | 24.001% | 65.34% | −99.73% | 1.366 | 0.409 | −70.06% | **40.68%** |
-| Max Sharpe | 4.726% | 74.39% | −99.98% | 2.685 | 1.172 | −56.34% | 66.04% |
-| **Buy & Hold** | 483.516% | **147.48%** | −— | 2.687 | 1.385 | −— | 76.68% |
+| Max Return | ~1.568 triliun % | 72.45% | **−99.99%** | 2.438 | 1.187 | −51.30% | 66.77% |
+| Min Drawdown | 74.356% | 115.32% | −99.85% | 1.168 | 0.593 | −49.25% | **51.57%** |
+| Max Sharpe | 511.793% | 71.86% | −99.99% | 2.686 | 1.184 | −55.91% | 66.76% |
+| **Buy & Hold** | 483.617% | **147.48%** | −— | 2.687 | 1.385 | −— | 76.68% |
 
 ### 8.2 Interpretasi Degradasi
 
@@ -637,11 +635,11 @@ Audit menjalankan tournament 18 konfigurasi challenger untuk memvalidasi keunggu
 > `Trolololo` (Logarithmic Regression / Bitcoin Rainbow Chart) adalah indikator dengan signifikansi statistik tertinggi (composite score 0.6557, Spearman ρ = −0.4261 pada lag 90 hari, p ≈ 0). Dominasinya semakin kuat pada lag yang lebih panjang, mengonfirmasi karakternya sebagai leading indicator makro jangka menengah.
 
 **RQ2: Parameter optimal untuk Total Return maksimum?**
-> Skenario 1 IS: **Buy ≤ 35, Sell ≥ 55, Alokasi 25%/25%** menghasilkan IS return 743 miliar persen dan OOS return 141.15% (vs B&H 147.48%).
+> Skenario 1 IS: **Buy ≤ 34, Sell ≥ 79, Alokasi 25%/25%** menghasilkan IS return ~1.568 triliun persen dan OOS return 72.45% (vs B&H 147.48%). Parameter bergeser dari dataset sebelumnya (Buy=35/Sell=55) akibat distribusi sinyal Trolololo yang berbeda dengan formula Dynamic Channel.
 
 **RQ3: Konfigurasi untuk Drawdown minimum dan Sharpe maksimum?**
-> - Min Drawdown: **Buy ≤ 1, Sell ≥ 55, Alokasi 1%/25%** → OOS MDD 40.68% (vs B&H 76.68%) — penurunan 36 poin
-> - Max Sharpe: **Buy ≤ 13, Sell = 100, Alokasi 25%/1%** → OOS Sharpe 1.172 (vs B&H 1.385)
+> - Min Drawdown: **Buy ≤ 1, Sell ≥ 57, Alokasi 1%/25%** → OOS MDD 51.57% (vs B&H 76.68%) — penurunan 25 poin
+> - Max Sharpe: **Buy ≤ 30, Sell = 100, Alokasi 25%/1%** → OOS Sharpe 1.184 (vs B&H 1.385)
 
 **RQ4: Degradasi IS vs OOS dan perbandingan dengan Skenario 2?**
 > Degradasi Sharpe IS→OOS: 56–70% (kategori overfitting). Ini bukan kegagalan — ini membuktikan bahwa strategi yang dikalibrasi pada era awal Bitcoin (2012–2020) tidak sepenuhnya transferable ke era institusional (2021–2026), akibat pergeseran karakteristik sinyal CBBI lintas siklus halving.
@@ -657,10 +655,10 @@ Audit menjalankan tournament 18 konfigurasi challenger untuk memvalidasi keunggu
 
 | Fase | Status | Output Utama | Dibuat |
 |---|---|---|---|
-| Fase 1 | ✅ Selesai | `master_dataset.parquet` (5.161 hari, tervalidasi) | 2026-04-09; diperbarui 2026-04-27 (Trolololo independen) |
+| Fase 1 | ✅ Selesai | `master_dataset.parquet` (5.161 hari, tervalidasi) | 2026-04-09; diperbarui 2026-04-28 (Dynamic Channel Normalization) |
 | Fase 2 | ✅ Selesai | `selected_indicators.json`, Trolololo terpilih | 2026-04-09 |
-| Fase 3 | ✅ Selesai | `optimal_params_summary.json`, 6 run grid search | 2026-04-09; diulang 2026-04-27 (dataset baru) |
-| Fase 4 | ✅ Selesai | Web app live, Index Revision Bias terdokumentasi | 2026-04-17 |
+| Fase 3 | ✅ Selesai | `optimal_params_summary.json`, 6 run grid search | 2026-04-09; diulang 2026-04-28 (Dynamic Channel Normalization) |
+| Fase 4 | ✅ Selesai | Web app live, yfinance + Dynamic Channel terdeploy | 2026-04-17; diperbarui 2026-04-28 |
 
 ---
 

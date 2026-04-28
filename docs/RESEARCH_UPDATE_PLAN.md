@@ -111,10 +111,17 @@ The CBBI API (`colintalkscrypto.com/cbbi/data/latest.json`) returned a `406 Not 
 ## 4. The Rebuild Plan
 
 ### BLOCKER STATUS: ALL RESOLVED
-- **Normalization method:** Fixed bands (confirmed by professor, April 27 2026)
-- **Genesis date used:** January 9, 2009 (first Bitcoin transaction, Satoshi to Hal Finney)
-- **Regression type:** Dynamic (refit on all available BTC price history each run)
-- **Calibration:** Confirmed matching professor's reference value of 26.7 (our output: 26.71, diff: 0.01)
+- **Normalization method:** Dynamic Channel Normalization (confirmed by professor, April 28 2026)
+  - Formula: top_base = ln(10)×(2.900×ln(d+1400)−19.463), bottom_base = ln(10)×(2.788×ln(d+1200)−19.463)
+  - d = days since 2012-01-01 (origin date changed from 2009-01-09)
+  - Cycle marks (hardcoded): HIGH: 2017-12-17, 2021-11-10; LOW: 2015-01-14, 2018-12-15, 2022-11-21
+  - Note: 2013 HIGH marks skipped (pre-yfinance data range)
+- **Genesis date used:** 2012-01-01 (professor's formula origin; replaces original 2009-01-09)
+- **Regression type:** Dynamic channel (two separate base channels with drift regression on cycle residuals)
+- **Calibration:** No fixed reference value needed — the formula IS the calibration
+  - Today (2026-04-28): output = 29.18 (neutral zone, plausible)
+  - 2021 ATH peak: 100.0 ✅ | 2022 bear bottom: 0.0 ✅ | 2024 mid: 35.25 ✅
+- **Grid search re-run:** 2026-04-28, new optimal params: S1 IS Max Return Buy=34/Sell=79, Max Sharpe Buy=30/Sell=100
 
 > Proceed directly to Step 2. No blockers remain.
 

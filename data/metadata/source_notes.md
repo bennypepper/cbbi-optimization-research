@@ -1,6 +1,6 @@
 # Source Notes — Dataset Master CBBI Optimization
 
-**Dibuat:** 2026-04-27 19:56:40
+**Dibuat:** 2026-04-28 16:40:10
 
 ## Sumber Data
 
@@ -69,9 +69,16 @@
    digunakan sebagai kolom sinyal default pada mesin optimisasi. Indikator 
    individual juga tersedia untuk eksplorasi di Fase 2.
 
-5. **Trolololo — kalkulasi independen (April 27, 2026):** Kolom `trolololo` 
-   tidak lagi diambil dari CBBI_dataset.xlsx. Nilainya dihitung ulang secara 
-   independen dari data harga BTC-USD (kolom `btc_close`) menggunakan regresi 
-   logaritmik power-law dengan fixed bands (BAND_MIN=-0.6353, BAND_MAX=0.8647). 
-   Ini menghilangkan Index Revision Bias — risiko bahwa nilai historis 
-   berubah saat Colin memperbarui algoritma indeks CBBI secara retroaktif.
+5. **Trolololo — Dynamic Channel Normalization (April 28, 2026):** Kolom `trolololo`
+   tidak lagi diambil dari CBBI_dataset.xlsx. Nilainya dihitung ulang secara
+   independen dari data harga BTC-USD (kolom `btc_close`) menggunakan formula
+   **Dynamic Channel Normalization** yang dikonfirmasi oleh pembimbing (2026-04-28).
+   Formula menggunakan dua channel power-law terpisah dalam ruang natural-log:
+     - top_base    = ln(10) × (2.900 × ln(d + 1400) − 19.463)
+     - bottom_base = ln(10) × (2.788 × ln(d + 1200) − 19.463)
+   di mana d = hari sejak 2012-01-01. Residual pada titik-titik siklus historis
+   (HIGH: 2017-12-17, 2021-11-10; LOW: 2015-01-14, 2018-12-15, 2022-11-21)
+   di-fit dengan regresi linear untuk menghasilkan channel adaptif. Normalisasi:
+   index = (price_log − channel_bottom) / (channel_top − channel_bottom), clip [0,100].
+   Ini menghilangkan Index Revision Bias — risiko bahwa nilai historis berubah
+   saat Colin memperbarui algoritma indeks CBBI secara retroaktif.
