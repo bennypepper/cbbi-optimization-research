@@ -4,7 +4,7 @@
 **Dokumen:** Laporan Temuan Penelitian PKL  
 **Tanggal:** April 2026  
 **Status:** Penelitian Selesai (Fase 1–4)  
-**Repository:** `bennypepper/cbbi-optimization-research`
+**Repository:** `bennypepper/btc-trading-optimization`
 
 ---
 

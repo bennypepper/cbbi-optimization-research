@@ -4,7 +4,7 @@
 
 > This repository is the research backbone for a PKL (Practicum Kerja Lapangan) research project.
 > It covers **Phases 1–3**: data pipeline, statistical feature selection, and the backtesting optimization engine.
-> The interactive web dashboard (Phase 4) lives in a [separate repository](https://github.com/bennypepper/cbbi-strategy-lab).
+> The interactive web dashboard (Phase 4) lives in a [separate repository](https://github.com/bennypepper/btc-strategy-lab).
 
 ---
 
@@ -94,7 +94,7 @@ python -m src.optimization.verify_manual
 ## Project Structure
 
 ```
-cbbi-optimization-research/
+btc-trading-optimization/
 ├── src/
 │   ├── data/
 │   │   ├── loader.py           # CBBI XLSX parser + yfinance BTC price fetcher

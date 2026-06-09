@@ -60,10 +60,10 @@ A Bitcoin trading strategy optimization research project. The core research is D
 
 ```
 Research repo : D:\Personal Projects\PKL_v4
-                GitHub: bennypepper/cbbi-optimization-research
+                GitHub: bennypepper/btc-trading-optimization
 
 Web app repo  : D:\Personal Projects\PKL_webapp
-                GitHub: bennypepper/cbbi-strategy-lab
+                GitHub: bennypepper/btc-strategy-lab
 
 Python to use : C:\Users\Benny Pepper\AppData\Local\Programs\Python\Python311\python.exe
                 (Python 3.14 is in PATH but is a bare install — always use Python311)

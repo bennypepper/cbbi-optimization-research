@@ -5,8 +5,8 @@
 **Status:** ✅ ALL STEPS COMPLETE — Both repos (PKL_v4 + PKL_webapp) fully migrated. Committed 2026-04-27.  
 **CBBI Dataset capture date confirmed:** Monday, March 16, 2026 (last data row: 2026-03-15)  
 **Repos involved:**
-- Research: `D:\Personal Projects\PKL_v4` (GitHub: `bennypepper/cbbi-optimization-research`)
-- Web App: `D:\Personal Projects\PKL_webapp` (GitHub: `bennypepper/cbbi-strategy-lab`)
+- Research: `D:\Personal Projects\PKL_v4` (GitHub: `bennypepper/btc-trading-optimization`)
+- Web App: `D:\Personal Projects\PKL_webapp` (GitHub: `bennypepper/btc-strategy-lab`)
 
 ---
 
