@@ -4,35 +4,47 @@ Dokumen ini membedah ringkasan hasil percobaan eksklusif setelah *Backtest Engin
 
 ---
 
-## 1. Bukti Kuat Adanya *Overfitting* & Kelemahan Pendekatan Masa Lalu
-Poin pertama dan paling mencolok dari seluruh riset adalah temuan angka pada **Skenario 1 (Validasi IS/OOS)**. Kita mengekstraksi kombinasi parameter yang menjuarai angka *Return* paling maksimal pada dekade emas (In-Sample: 2012-2020), untuk kemudian divalidasi ketangguhannya di pasar modern pasca rasionalisasi pasar kripto (Out-of-Sample: 2021-2026).
+## 1. Degradasi Kinerja In-Sample vs Out-of-Sample (Bukti Empiris *Overfitting*)
 
-**Statistik Terbaik Skenario 1 (Model: Maksimal Return / agresif):**
-- **Optimal Parameter (2012-2020):** `Threshold Buy <= 45`, `Sell >= 64`, Alokasi Beli 25%, Alokasi Jual 25% (per harinya jika sinyal tercapai).
-- **Hasil Kinerja Model (2012-2020)*:** Total peningkatan persentase nilai modal berlipat miliaran kali seiring portofolionya menumpangi tren pertumbuhan agresif aset kripto dari tahun perintis. Model di sini beraksi sangat sempurna **karena telah menghafal seluruh grafik (Hindsight Bias)** atau dalam akademik dikenal sebagai indikasi *Overfitting* tajam terhadap histori volatilitas awal mula Bitcoin.
-- **Validasi Terhadap Keadaan Baru (Out-of-Sample: 2021-2026):** Parameter yang sangat *overfit* dan sukses di atas **hancur berkeping-keping (-100% degradasi return menjadi impas dan merugi ke -0.02%)**.
+Poin pertama dan paling mencolok dari seluruh riset adalah temuan angka pada **Skenario 1 (Validasi IS/OOS)**. Parameter yang menjuarai angka *Return* paling maksimal pada In-Sample (2012–2020) diuji kinerjanya pada pasar modern pasca-2021 (Out-of-Sample: 2021–2026).
 
-**Catatan Khusus untuk Pembimbing:** Temuan ini secara metodologis adalah keberhasilan riset yang spektakuler. Hasil ini membuktikan premis asli kita (yang mungkin akan ada di Bab 1 atau 4) bahwa: **"Strategi yang dikalibrasi membabi buta tanpa pemisahan zona uji (Out-of-Sample) pada aset kripto awal dekade sama sekali tidak tangguh untuk diberlakukan pada Bitcoin pasca era institusional (2021-ke atas)."** Nilai CBBI telah bergeser sifat dan frekuensi sensitivitasnya dalam beberapa siklus terakhir.
+**Statistik Skenario 1 (Profil Agresif / Maksimal Return):**
+- **Optimal Parameter IS:** Threshold Buy = 34, Sell = 79, Alokasi Beli 25%, Alokasi Jual 25%.
+- **Hasil IS (2012–2020):** Total Return = **15,7 triliun kali lipat** dari modal awal. CAGR tahunan = **2.825%**. Sharpe Ratio = 2,44.
+- **Hasil OOS (2021–2026):** Total Return = **0,72 kali** (rugi 28%). CAGR tahunan = **−6,0%**. Selisih magnitud IS÷OOS = **21,6 triliun kali lipat**.
+
+**Statistik Skenario 1 (Profil Seimbang / Max Sharpe):**
+- **Optimal Parameter IS:** Threshold Buy = 30, Sell = 100, Alokasi Beli 25%, Alokasi Jual 1%.
+- **Hasil IS:** Return = **5.117 kali lipat**, CAGR = **158%/tahun**.
+- **Hasil OOS:** Return = **0,72 kali** (rugi 28%), CAGR = **−6,2%/tahun**. Selisih = **7.122 kali lipat**.
+
+**Catatan untuk Pembimbing:** Temuan ini secara metodologis adalah keberhasilan riset. Hasil ini membuktikan bahwa parameter yang dikalibrasi pada era pertumbuhan agresif Bitcoin menghafal pola historis namun tidak mampu digeneralisasi pada kondisi pasar pasca-2021. Magnitud perbedaan hingga 21,6 triliun kali lipat menegaskan pentingnya pemisahan IS/OOS.
 
 ---
 
-## 2. Peta Kemampuan Sesungguhnya (Skenario 2 - Penjelajahan Historis Absolut)
-Skenario 2 digunakan untuk memetakan batas potensi maksimal indikator Trolololo secara historis dari 2012-2026. Berdasarkan ekstraksi dari Grid Search, sistem berhasil mendelegasikan 3 "Profil Risiko Utama" (Objective Targets) yang dapat dipilih oleh Calon Pengguna tergantung pada nafsu risiko masing-masing investasinya:
+## 2. Peta Kemampuan Sesungguhnya (Skenario 2 — Eksplorasi Historis Penuh)
 
-1. **Profil Return Maksimum (Agresif):** Membiarkan Drawdown terjadi, asalkan modal bisa ditarik lipat ganda ke puncaknya. Membutuhkan titik beli pada fase menengah panjang (`<= 45`) dan langsung jual setahap-demi setahap dari sebelum puncaknya tercapai (`>= 64`).
-2. **Profil Minimum Drawdown (Konservatif Ekstrem):** Bertujuan mencari titik di mana nilai dompet Anda sama sekali tidak pernah jatuh dari *Peak Value* sebelumnya. Algoritma menuntut indikator Trolololo benar-benar di ambang kematian absolute (`1.0`) dan hanya dialokasikan modal sekecil *0.01%*. Sangat lambat dan hampir tidak memperdagangkan aset, tapi aman dari guncangan besar.
-3. **Profil Sharpe Ratio Maksimum (Balanced Risk-Reward):** Merupakan formula hibrida paling sehat yang dirancang untuk mendapatkan keseimbangan *Risk-to-Return* terbaik. Konfigurasi terbaiknya adalah sabar menunggu resesi pesimis absolut **(Threshold Buy <= 30)** dan menjual seluruh portofolio **hanya** pada euforia pasar terpanas **(Threshold Sell >= 100)** dengan gaya Jual Sekaligus (100% BTC dikeluarkan di ujung tebing siklus).
+Skenario 2 memetakan batas potensi maksimal indikator *Logarithmic Regression* secara historis dari 2012–2026. Grid Search mengidentifikasi 3 profil strategi optimal:
+
+| Profil | Threshold B/J | Alokasi B/J | Return | CAGR | Sharpe |
+|---|---|---|---|---|---|
+| **Agresif** (Max Return) | 7 / 79 | 25% / 25% | 38,0 triliun× | 803,6%/tahun | 2,01 |
+| **Konservatif** (Min Drawdown) | 1 / 57 | 1% / 25% | 1.608× | 68,2%/tahun | 0,99 |
+| **Seimbang** (Max Sharpe) | 30 / 100 | 25% / 1% | 12.823× | 94,6%/tahun | 2,30 |
 
 ## 3. Komparasi Dengan *Buy and Hold* (Benchmark Klasik)
-Sebagai perbandingan wajar:
-- Jika di masa Out-of Sample (2021-2026), Anda sekadar mengumpulkan BTC dan menyimpannya (Buy & Hold), portofolio Anda akan bertambah nilai riilnya sebesar `+1.47` (Atau ~147%).
-- Hal ini secara tidak langsung menyokong tesis fundamental bahwa strategi berbasis sinyal indikator yang lambat membutuhkan siklus validasi jangka panjang dan secara statistik lebih membatasi rasio keuntungan pada siklus konsolidasi yang sempit ketimbang hanya `Buy & Hold`.
+
+- **In-Sample (2012–2020):** Buy & Hold menghasilkan 4.836× (CAGR 157%/tahun).
+- **Out-of-Sample (2021–2026):** Buy & Hold menghasilkan 1,47× (CAGR 7,8%/tahun).
+- **Historis Penuh (2012–2026):** Buy & Hold menghasilkan 12.117× (CAGR 93,8%/tahun).
+
+Profil Seimbang (Max Sharpe) pada Skenario 2 menghasilkan return sebanding dengan Buy & Hold (12.823× vs 12.117×) namun dengan Sharpe Ratio 2,30 yang jauh lebih tinggi, mengindikasikan *risk-adjusted return* yang lebih baik.
 
 ---
 
-## Kesimpulan Presentasi ke Pembimbing:
-1. **Riset ini berintegritas tinggi:** Metodologi ini berhasil membuktikan kelemahan model optimasi masa lalu yang tidak memilah *In-Sample* dan *Out-of Sample*, di mana angka "cantik" dari backtest murni hanyalah halusinasi matematis yang hancur dalam validasi siklus modern kripto.
-2. **Kinerja Numba Engine:** Mampu mengeksplorasi kalkulasi kompleks jutaan probabilitas menjadi sepuluh detik saja tanpa mengorbankan akurasi operasional simulasi nyata (T+1 market order, perisai Anti-Lookahead, penggerusan kas lewat Fee Transaksi Spot %0.1). Laporan ini valid merefleksikan portofolio tanpa sihir rekayasa angka.
+## Kesimpulan:
+1. **Riset berintegritas tinggi:** Metodologi ini berhasil membuktikan *overfitting* dengan magnitud hingga 21,6 triliun kali lipat antara kinerja IS dan OOS. Parameter yang dikalibrasi tanpa pemisahan zona uji menghasilkan ilusi kinerja.
+2. **Kinerja Numba Engine:** Mampu mengeksplorasi 1.293.750 kombinasi parameter dengan cepat tanpa mengorbankan akurasi operasional simulasi (T+1 market order, Anti-Lookahead, Fee 0,1%).
 
 ---
 

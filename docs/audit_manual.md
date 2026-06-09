@@ -1,6 +1,6 @@
 # Audit Manual Komprehensif: Fase 1 hingga Fase 3 (Optimisasi CBBI)
 
-Dokumen ini merupakan panduan audit manual yang mendetail dan menyeluruh untuk memverifikasi setiap aspek krusial dari penelitian "Optimisasi Parameter Threshold dan Alokasi Aset Berbasis Indikator CBBI". 
+Dokumen ini merupakan panduan audit manual yang mendetail dan menyeluruh untuk memverifikasi setiap aspek krusial dari penelitian "Optimalisasi Parameter Trading Bitcoin Menggunakan Grid Search pada Tiga Metrik Evaluasi Berbasis Indikator Logarithmic Regression". 
 
 Pastikan setiap poin diuji dan divalidasi sebelum melanjutkan ke Fase 4 (Aplikasi Web).
 

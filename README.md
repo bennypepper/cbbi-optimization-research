@@ -1,6 +1,6 @@
-# CBBI Optimization Research
+# Bitcoin Trading Parameter Optimization via Grid Search
 
-**Quantitative optimization of Bitcoin trading strategies using CBBI (Crypto Bull/Bear Index) on-chain indicators.**
+**Optimalisasi Parameter Trading Bitcoin Menggunakan Grid Search pada Tiga Metrik Evaluasi Berbasis Indikator Logarithmic Regression**
 
 > This repository is the research backbone for a PKL (Practicum Kerja Lapangan) research project.
 > It covers **Phases 1–3**: data pipeline, statistical feature selection, and the backtesting optimization engine.
@@ -10,21 +10,19 @@
 
 ## Overview
 
-The CBBI (Crypto Bull/Bear Index) aggregates nine on-chain Bitcoin metrics into a single composite confidence score [0–100]. In practice, traders apply intuitive thresholds — "buy when below 30, sell when above 70" — without any empirical basis for those values.
+Many popular Bitcoin on-chain indicators exist (Pi Cycle Top, MVRV Z-Score, Puell Multiple, Logarithmic Regression, etc.), but there is no empirical study comparing which indicator is statistically the strongest trading signal, nor any data-driven method for determining optimal buy/sell thresholds.
 
-This research builds a rigorous quantitative framework to answer: **what are the actual optimal thresholds and allocation sizes, and how robust are they out of sample?**
+This research builds a rigorous quantitative framework that (1) selects the best indicator via Spearman correlation, (2) optimizes threshold and allocation parameters via exhaustive grid search, and (3) measures actual performance across In-Sample and Out-of-Sample periods.
 
 The engine runs a full grid search over **1,293,750 parameter combinations** across two complementary research scenarios, evaluating three objectives: Total Return, Maximum Drawdown, and Sharpe Ratio.
 
 ---
 
-## Research Questions
+## Research Objectives
 
-1. Which CBBI sub-indicator has the highest statistical significance as a trading signal basis?
-2. What buy/sell threshold pair and asset allocation percentage maximizes Total Return?
-3. What configuration minimizes Maximum Drawdown and maximizes Sharpe Ratio?
-4. How much does performance degrade between In-Sample and Out-of-Sample (Scenario 1), and how does that compare to the historical maximum found in Scenario 2?
-5. *(Post Phase-4 finding)* How does parameter drift manifest when the CBBI formula is retroactively revised, and what architectural response mitigates this for live deployment?
+1. **Identify the best indicator:** Which Bitcoin on-chain indicator has the highest statistical significance as a trading signal, based on Spearman correlation across 5 lag windows and Kruskal-Wallis distribution testing?
+2. **Find optimal parameter values:** What buy/sell threshold pair and allocation percentage optimizes performance across three evaluation metrics (Total Return, Maximum Drawdown, Sharpe Ratio) via grid search?
+3. **Measure actual IS vs OOS performance:** How do optimal parameters perform on In-Sample (2012–2020) vs Out-of-Sample (2021–2026) data, and what is the magnitude of degradation?
 
 ---
 
@@ -43,8 +41,8 @@ Phase 4 ── Interactive Web Dashboard (separate repo)
 
 | Phase | Description | Key Output |
 |---|---|---|
-| **1 — Data Pipeline** | Parse CBBI XLSX (8 indicators + composite) + independently compute Trolololo from yfinance BTC price data + fetch BTC OHLC; build lookahead-free master dataset | `data/processed/master_dataset.parquet` |
-| **2 — Feature Selection** | Spearman correlation (5 lag windows) + Kruskal-Wallis distribution test; rank all 9 indicators | `analysis/selected_indicators.json` |
+| **1 — Data Pipeline** | Parse 10 on-chain indicators from CBBI dataset + independently compute Logarithmic Regression from yfinance BTC price data + fetch BTC OHLC; build lookahead-free master dataset | `data/processed/master_dataset.parquet` |
+| **2 — Feature Selection** | Spearman correlation (5 lag windows) + Kruskal-Wallis distribution test; rank all 10 indicators; select Logarithmic Regression as best signal | `analysis/selected_indicators.json` |
 | **3 — Optimization** | Numba-accelerated grid search (1.29M trials × 2 scenarios × 3 objectives); manual backtesting verification | `results/optimal_params_summary.json` |
 
 ---
@@ -146,15 +144,25 @@ cbbi-optimization-research/
 > Full quantitative results: [`results/optimal_params_summary.json`](results/optimal_params_summary.json)
 > Narrative summary: [`reports/phase3_results_overview.md`](reports/phase3_results_overview.md)
 
-**Primary Signal Indicator Selected (Phase 2):** `Trolololo` (Logarithmic Regression / Bitcoin Rainbow Chart)
+**1. Best Indicator: Logarithmic Regression (Trolololo)**
 
-Phase 2 analysis identified `trolololo` as statistically superior to the composite CBBI Confidence Score across all lag windows — the basis for using it as the optimization signal in Phase 3, rather than the default composite.
+Phase 2 analysis ranked 10 on-chain indicators by Spearman correlation across 5 lag windows. Logarithmic Regression achieved the highest composite score (0.6557) with Spearman ρ = −0.4261 at 90-day lag — significantly outperforming all other indicators. This indicator is computed independently from BTC price data via Dynamic Channel Normalization, with no dependency on third-party APIs.
 
-**Post Phase-4 Finding: CBBI Index Revision Bias**
+**2. Optimal Parameters Found (3 Risk Profiles)**
 
-During web application validation (Phase 4), a structural property of the CBBI instrument was documented: the ColintalksCrypto API **retroactively recalculates its entire historical index** whenever Colin updates the formula (e.g., removing Stock-to-Flow from composition). Empirical proof: the value recorded for `2021-01-01` in this research's frozen dataset is `63.65`; the same date queried via the Live API on 2026-04-17 returns `78.13` — a drift of **+14.48 points**.
+| Profile | Buy Threshold | Sell Threshold | Alloc Buy | Alloc Sell | Return (Full) | CAGR |
+|---|---|---|---|---|---|---|
+| Aggressive (Max Return) | 7 | 79 | 25% | 25% | 38.0 trillion × | 803.6%/yr |
+| Conservative (Min Drawdown) | 1 | 57 | 1% | 25% | 1,608× | 68.2%/yr |
+| Balanced (Max Sharpe) | 30 | 100 | 25% | 1% | 12,823× | 94.6%/yr |
 
-This is classified as an **instrument-level limitation** analogous to *index revision bias* in econometrics, not a flaw in this research's methodology. The frozen `master_dataset.parquet` remains a valid, reproducible research artifact. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md) for full documentation including draft language for the Limitations chapter.
+**3. Massive IS→OOS Degradation (Overfitting Evidence)**
+
+Scenario 1 (Aggressive profile): parameters yielding **15.7 trillion ×** return on In-Sample (CAGR 2,825%/yr) produced only **0.72×** (loss of 28%, CAGR −6.0%/yr) on Out-of-Sample. The magnitude gap is **21.6 trillion ×** — empirical proof that strategies calibrated without IS/OOS separation cannot generalize to post-2021 Bitcoin markets.
+
+**Post Phase-4 Finding: Index Revision Bias**
+
+During web application validation, CBBI's historical values were found to shift retroactively when the formula is updated (documented drift: +14.48 points on 2021-01-01). This is an instrument-level limitation. The Logarithmic Regression indicator used in this research is computed independently and is not affected. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).
 
 ---
 

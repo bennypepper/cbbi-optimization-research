@@ -1,15 +1,15 @@
 # System Architecture
-## CBBI-Based Bitcoin Trading Strategy Optimization
+## Bitcoin Trading Parameter Optimization via Grid Search
 
 **Version:** 2.1  
 **Status:** Production / Final  
-**Last Updated:** 2026-04-27 — Trolololo signal decoupled from CBBI XLSX (see §2.1)
+**Last Updated:** 2026-06-09 — Updated to reflect revised research framing
 
 ---
 
 ## 1. Project Overview
 
-This document outlines the technical architecture of the CBBI (Crypto Bull and Bear Index) Trading Strategy Optimization System. The system is designed to programmatically evaluate and optimize trading strategies based on historical CBBI signals, mitigating biases and providing reproducible backtesting results.
+This document outlines the technical architecture of the Bitcoin Trading Parameter Optimization System. The system evaluates 10 on-chain indicators to select the most statistically significant signal (Logarithmic Regression / Trolololo), then optimizes trading parameters via exhaustive grid search across three evaluation metrics (Total Return, Maximum Drawdown, Sharpe Ratio).
 
 The architecture is modularized into four core layers:
 1. **Data Pipeline Layer:** Data ingestion, alignment, and preprocessing.
@@ -39,7 +39,7 @@ The data pipeline aggregates raw data from multiple sources into a single, cohes
 
 ## 3. Statistical Analysis Layer
 
-Before optimization, the system identifies the most statistically significant CBBI components to be used as signal baselines.
+Before optimization, the system identifies the most statistically significant on-chain indicator to be used as the signal baseline.
 
 ### 3.1 Spearman Correlation Analysis
 - Computes non-parametric Spearman rank correlation between indicator values and forward returns across multiple lag windows (7, 14, 30, 60, and 90 days).

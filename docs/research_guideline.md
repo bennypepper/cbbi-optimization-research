@@ -4,7 +4,7 @@
 
 ## Judul Penelitian
 
-**"Optimisasi Parameter Threshold dan Alokasi Aset Berbasis Indikator CBBI untuk Memaksimalkan Kinerja Portofolio Bitcoin"**
+**"Optimalisasi Parameter Trading Bitcoin Menggunakan Grid Search pada Tiga Metrik Evaluasi Berbasis Indikator Logarithmic Regression"**
 
 ---
 
