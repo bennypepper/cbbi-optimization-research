@@ -144,9 +144,9 @@ btc-trading-optimization/
 > Full quantitative results: [`results/optimal_params_summary.json`](results/optimal_params_summary.json)
 > Narrative summary: [`reports/phase3_results_overview.md`](reports/phase3_results_overview.md)
 
-**1. Best Indicator: Logarithmic Regression (Trolololo)**
+**1. Best Indicator: Logarithmic Regression**
 
-Phase 2 analysis ranked 10 on-chain indicators by Spearman correlation across 5 lag windows. Logarithmic Regression achieved the highest composite score (0.6819) with Spearman ρ = −0.4698 at 90-day lag — significantly outperforming all other indicators. This indicator is computed independently from BTC price data via Dynamic Channel Normalization, with no dependency on third-party APIs.
+Phase 2 analysis ranked 10 on-chain indicators by Spearman correlation across 5 lag windows. Logarithmic Regression achieved the highest composite score (0.6819) with Spearman ρ = −0.4698 at 90-day lag, significantly outperforming all other indicators. This indicator is computed independently from BTC price data via Dynamic Channel Normalization, with no dependency on third-party APIs.
 
 **2. Optimal Parameters Found (3 Risk Profiles)**
 
@@ -158,11 +158,11 @@ Phase 2 analysis ranked 10 on-chain indicators by Spearman correlation across 5 
 
 **3. Performance Degradation (Overfitting Evidence)**
 
-Scenario 1 (Aggressive profile): parameters yielding **125,702×** return on In-Sample (CAGR 268.6%/yr) produced **3.74×** (profit of +273.75%, CAGR +28.9%/yr) on Out-of-Sample. The magnitude gap is **33,610×** — empirical proof of performance degradation due to the transition from the early hyper-growth era to a mature cycle, and highlights the importance of In-Sample/Out-of-Sample separation. Note that all strategy profiles still beat the Buy & Hold OOS benchmark (+19.0% CAGR) with much lower drawdowns.
+Scenario 1 (Aggressive profile): parameters yielding **125,702×** return on In-Sample (CAGR 268.6%/yr) produced **3.74×** (profit of +273.75%, CAGR +28.9%/yr) on Out-of-Sample. The magnitude gap is **33,610×**, providing empirical proof of performance degradation due to the transition from the early hyper-growth era to a mature cycle, highlighting the importance of In-Sample/Out-of-Sample separation. Note that all strategy profiles still beat the Buy & Hold OOS benchmark (+19.0% CAGR) with much lower drawdowns.
 
 **Independent Design to Bypass Index Revision Bias**
 
-During web application validation, third-party composite CBBI values were found to shift retroactively when the formula is updated (documented drift of +14.48 points on 2021-01-01 between research snapshot and live API). To eliminate this instrument-level limitation, the primary Logarithmic Regression (Trolololo) indicator is computed locally using Dynamic Channel Normalization and is completely immune to external API revisions.
+During web application validation, third-party composite CBBI values were found to shift retroactively when the formula is updated (documented drift of +14.48 points on 2021-01-01 between research snapshot and live API). To eliminate this instrument-level limitation, the primary Logarithmic Regression indicator is computed locally using Dynamic Channel Normalization and is completely immune to external API revisions.
 
 ---
 
@@ -183,12 +183,12 @@ This is the most critical correctness requirement in the system:
 
 Two scenarios run independently with identical parameter search spaces:
 
-| | Scenario 1 — Academic Validation | Scenario 2 — Maximum Exploration |
+| | Scenario 1: Academic Validation | Scenario 2: Maximum Exploration |
 |---|---|---|
 | **Purpose** | Prove out-of-sample robustness | Map the absolute historical maximum |
 | **Optimization data** | In-Sample: 2012–2020 | Full dataset: 2012–2026 |
 | **Validation** | Forward test on OOS: 2021–2026 | None (intentional) |
-| **Lookahead bias** | None — strictly isolated | Present — explicitly disclosed |
+| **Lookahead bias** | None (strictly isolated) | Present (explicitly disclosed) |
 | **Role in report** | Scientific validity benchmark | Comparative reference ceiling |
 
 > ⚠️ **Scenario 2 Disclosure:** Results represent retrospective maximum potential only. They cannot be interpreted as predictive signals. This is documented explicitly in `results/optimal_params_summary.json` under the `"disclosure"` field.
@@ -219,11 +219,11 @@ Three independent objectives per scenario:
 
 | Data | Source | Access |
 |---|---|---|
-| 8 CBBI indicators (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull) + composite score | [cbbi.info](https://cbbi.info) — official CBBI dataset | Free, manual download |
-| **Trolololo** *(updated 2026-04-27)* | Computed independently via `src/data/trolololo.py` from BTC-USD daily close prices (yfinance). Eliminates Index Revision Bias. | Free, auto-computed |
+| 8 CBBI indicators (pi_cycle, rupl, rhodl_ratio, puell_multiple, two_year_ma_mult, mvrv_zscore, reserve_risk, woobull) + composite score | [cbbi.info](https://cbbi.info), the official CBBI dataset | Free, manual download |
+| **Logarithmic Regression** *(updated 2026-04-27)* | Computed independently via `src/data/trolololo.py` from BTC-USD daily close prices (yfinance). Eliminates Index Revision Bias. | Free, auto-computed |
 | BTC daily open/close prices | [Yahoo Finance](https://finance.yahoo.com) via `yfinance` | Free, auto-fetched |
 
-> ⚠️ **Dataset Snapshot Notice:** The CBBI dataset used in this research is a **static snapshot** taken at the time of Phase 1 pipeline execution. The ColintalksCrypto API retroactively updates its historical values when the index formula changes. Results from this repository are reproducible only against the frozen `master_dataset.parquet`, not against a live API query of the same date range. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).
+> ⚠️ **Dataset Snapshot Notice:** The CBBI dataset used in this research is a **static snapshot** taken at the time of Phase 1 pipeline execution. The ColintalksCrypto API retroactively updates its historical values when the index formula changes. Results from this repository are reproducible only against the frozen `master_dataset.parquet`, not against a live API query of the same date range.
 
 ---
 
@@ -231,7 +231,7 @@ Three independent objectives per scenario:
 
 This project is a **research artifact** completed as part of a PKL (Practicum Kerja Lapangan) research program. All content is for educational and academic purposes only. Nothing in this repository constitutes financial advice. Cryptocurrency markets carry substantial risk, and past performance does not guarantee future results.
 
-Optimal parameters reported in this repository are calibrated against a specific frozen snapshot of the CBBI dataset. Deploying these parameters against the live API without re-optimization may yield different performance outcomes due to retroactive formula revisions by the index author. This limitation is fully documented in [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).
+Optimal parameters reported in this repository are calibrated against a specific frozen snapshot of the CBBI dataset. Deploying these parameters against the live API without re-optimization may yield different performance outcomes due to retroactive formula revisions by the index author. This limitation is caused by retroactive formula updates by the index author.
 
 ---
 
