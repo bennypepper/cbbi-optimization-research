@@ -146,23 +146,23 @@ btc-trading-optimization/
 
 **1. Best Indicator: Logarithmic Regression (Trolololo)**
 
-Phase 2 analysis ranked 10 on-chain indicators by Spearman correlation across 5 lag windows. Logarithmic Regression achieved the highest composite score (0.6557) with Spearman ρ = −0.4261 at 90-day lag — significantly outperforming all other indicators. This indicator is computed independently from BTC price data via Dynamic Channel Normalization, with no dependency on third-party APIs.
+Phase 2 analysis ranked 10 on-chain indicators by Spearman correlation across 5 lag windows. Logarithmic Regression achieved the highest composite score (0.6819) with Spearman ρ = −0.4698 at 90-day lag — significantly outperforming all other indicators. This indicator is computed independently from BTC price data via Dynamic Channel Normalization, with no dependency on third-party APIs.
 
 **2. Optimal Parameters Found (3 Risk Profiles)**
 
 | Profile | Buy Threshold | Sell Threshold | Alloc Buy | Alloc Sell | Return (Full) | CAGR |
 |---|---|---|---|---|---|---|
-| Aggressive (Max Return) | 7 | 79 | 25% | 25% | 38.0 trillion × | 803.6%/yr |
-| Conservative (Min Drawdown) | 1 | 57 | 1% | 25% | 1,608× | 68.2%/yr |
-| Balanced (Max Sharpe) | 30 | 100 | 25% | 1% | 12,823× | 94.6%/yr |
+| Aggressive (Max Return) | 5 | 96 | 25% | 15% | 912,316× | 162.9%/yr |
+| Conservative (Min Drawdown) | 1 | 61 | 1% | 15% | 1,642× | 68.4%/yr |
+| Balanced (Max Sharpe) | 1 | 57 | 21% | 3% | 104,303× | 125.6%/yr |
 
-**3. Massive IS→OOS Degradation (Overfitting Evidence)**
+**3. Performance Degradation (Overfitting Evidence)**
 
-Scenario 1 (Aggressive profile): parameters yielding **15.7 trillion ×** return on In-Sample (CAGR 2,825%/yr) produced only **0.72×** (loss of 28%, CAGR −6.0%/yr) on Out-of-Sample. The magnitude gap is **21.6 trillion ×** — empirical proof that strategies calibrated without IS/OOS separation cannot generalize to post-2021 Bitcoin markets.
+Scenario 1 (Aggressive profile): parameters yielding **125,702×** return on In-Sample (CAGR 268.6%/yr) produced **3.74×** (profit of +273.75%, CAGR +28.9%/yr) on Out-of-Sample. The magnitude gap is **33,610×** — empirical proof of performance degradation due to the transition from the early hyper-growth era to a mature cycle, and highlights the importance of In-Sample/Out-of-Sample separation. Note that all strategy profiles still beat the Buy & Hold OOS benchmark (+19.0% CAGR) with much lower drawdowns.
 
-**Post Phase-4 Finding: Index Revision Bias**
+**Independent Design to Bypass Index Revision Bias**
 
-During web application validation, CBBI's historical values were found to shift retroactively when the formula is updated (documented drift: +14.48 points on 2021-01-01). This is an instrument-level limitation. The Logarithmic Regression indicator used in this research is computed independently and is not affected. See [`reports/index_revision_bias_finding.md`](reports/index_revision_bias_finding.md).
+During web application validation, third-party composite CBBI values were found to shift retroactively when the formula is updated (documented drift of +14.48 points on 2021-01-01 between research snapshot and live API). To eliminate this instrument-level limitation, the primary Logarithmic Regression (Trolololo) indicator is computed locally using Dynamic Channel Normalization and is completely immune to external API revisions.
 
 ---
 
