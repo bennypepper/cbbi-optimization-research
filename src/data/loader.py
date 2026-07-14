@@ -135,14 +135,17 @@ def load_cbbi_xlsx(filepath: str | Path = XLSX_PATH) -> pd.DataFrame:
     date_col = df["date"].astype(str).str.strip()
 
     def _flexible_parse(s: str) -> pd.Timestamp:
-        """Parse tanggal dengan fallback antara dua format."""
+        """Parse tanggal dengan unscrambling untuk Excel date corruption."""
         try:
+            s = str(s).strip()
             if len(s) == 10 and s[2] == "-":
-                # Format: MM-DD-YYYY
+                # Format asli CBBI: MM-DD-YYYY
                 return pd.to_datetime(s, format="%m-%d-%Y")
             else:
-                # Format: YYYY-MM-DD HH:MM:SS atau varian lain
-                return pd.to_datetime(s, infer_datetime_format=True)
+                # Format yang di-auto-parse oleh Excel: YYYY-MM-DD HH:MM:SS
+                dt = pd.to_datetime(s)
+                # Swap month dan day yang tertukar oleh regional settings Excel
+                return pd.Timestamp(year=dt.year, month=dt.day, day=dt.month)
         except Exception:
             return pd.NaT
 
