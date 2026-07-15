@@ -71,13 +71,13 @@ INDICATOR_COLS = [
 
 # Label tampilan untuk setiap indikator
 INDICATOR_LABELS = {
-    "cbbi_confidence":  "CBBI Confidence",
+    "cbbi_confidence":  "Composite Index",
     "pi_cycle":         "Pi Cycle Top",
     "rupl":             "RUPL",
     "rhodl_ratio":      "RHODL Ratio",
     "puell_multiple":   "Puell Multiple",
     "two_year_ma_mult": "2Y MA Multiplier",
-    "trolololo":        "Trolololo (LogReg)",
+    "trolololo":        "Logarithmic Regression",
     "mvrv_zscore":      "MVRV Z-Score",
     "reserve_risk":     "Reserve Risk",
     "woobull":          "Woobull NVT",
@@ -439,12 +439,12 @@ def generate_visualizations(
         annot_kws={"size": 9}, ax=ax,
     )
     ax.set_title(
-        "Korelasi Spearman: Indikator CBBI vs Forward Return BTC\n"
+        "Korelasi Spearman: Indikator On-Chain vs Forward Return BTC\n"
         "(Data In-Sample 2012–2020)",
         fontsize=13, fontweight="bold", pad=15,
     )
     ax.set_xlabel("Lag Window", fontsize=11)
-    ax.set_ylabel("Indikator CBBI", fontsize=11)
+    ax.set_ylabel("Indikator On-Chain", fontsize=11)
     plt.tight_layout()
     out1 = CHARTS_DIR / "spearman_heatmap.png"
     fig.savefig(out1, dpi=150, bbox_inches="tight")
@@ -502,7 +502,7 @@ def generate_visualizations(
                for c in cond_order]
     fig.legend(handles=patches, loc="lower center", ncol=4, fontsize=10, title="Kondisi Pasar")
     fig.suptitle(
-        "Distribusi Nilai Indikator CBBI per Kondisi Pasar\n"
+        "Distribusi Nilai Indikator On-Chain per Kondisi Pasar\n"
         "(Top-6 Indikator | Data In-Sample 2012–2020)",
         fontsize=13, fontweight="bold", y=1.01,
     )
@@ -529,7 +529,7 @@ def generate_visualizations(
                linewidth=1.5, label=f"Threshold seleksi ({SELECTION_COMPOSITE_THRESHOLD})")
     ax.set_xlabel("Composite Score", fontsize=11)
     ax.set_title(
-        "Pemeringkatan Indikator CBBI — Composite Score\n"
+        "Pemeringkatan Indikator On-Chain: Composite Score\n"
         "(0.6 × |max Spearman ρ| + 0.4 × (1 − norm p-value))",
         fontsize=12, fontweight="bold",
     )

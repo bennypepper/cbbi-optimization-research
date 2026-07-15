@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T00:40:01.522632",
+  "generated_at": "2026-07-15T12:04:00.937681",
   "phase_used": "in_sample",
   "date_range": {
     "start": "2012-01-01",
@@ -26,7 +26,7 @@
   "ranking": [
     {
       "indicator": "trolololo",
-      "label": "Trolololo (LogReg)",
+      "label": "Logarithmic Regression",
       "composite_score": 0.6819,
       "best_lag_days": 90,
       "best_spearman_rho": -0.4698,
@@ -80,7 +80,7 @@
     },
     {
       "indicator": "cbbi_confidence",
-      "label": "CBBI Confidence",
+      "label": "Composite Index",
       "composite_score": 0.4419,
       "best_lag_days": 90,
       "best_spearman_rho": -0.07,

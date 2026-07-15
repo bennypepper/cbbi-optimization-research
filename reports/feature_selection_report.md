@@ -1,6 +1,6 @@
 # Laporan Seleksi Fitur — Fase 2
 
-**Dibuat:** 2026-07-15 00:40:04
+**Dibuat:** 2026-07-15 12:04:06
 **Filter data:** In-Sample (2012-01-01 – 2020-12-31)
 **Metode:** Korelasi Spearman × 5 lag window + Distribusi Kruskal-Wallis
 
@@ -33,13 +33,13 @@ pada minimal satu lag window. Minimum 3 indikator terpilih.
 
 | Rank | Indikator | Composite Score | Best Lag | Spearman ρ | p-value | Selected |
 |---|---|---|---|---|---|---|
-| 1 | Trolololo (LogReg) | 0.6819 | 90d | -0.4698 | 0.0000 | ✅ |
+| 1 | Logarithmic Regression | 0.6819 | 90d | -0.4698 | 0.0000 | ✅ |
 | 2 | Reserve Risk | 0.5062 | 90d | -0.1770 | 0.0000 | ✅ |
 | 3 | RUPL | 0.4680 | 90d | +0.1133 | 0.0000 | ✅ |
 | 4 | RHODL Ratio | 0.4601 | 90d | -0.1001 | 0.0000 | ✅ |
 | 5 | Pi Cycle Top | 0.4598 | 90d | +0.0997 | 0.0000 | ✅ |
 | 6 | MVRV Z-Score | 0.4509 | 90d | +0.0848 | 0.0000 | ✅ |
-| 7 | CBBI Confidence | 0.4419 | 90d | -0.0700 | 0.0001 | ✅ |
+| 7 | Composite Index | 0.4419 | 90d | -0.0700 | 0.0001 | ✅ |
 | 8 | Puell Multiple | 0.4418 | 7d | +0.0697 | 0.0001 | ✅ |
 | 9 | Woobull NVT | 0.4301 | 90d | -0.0523 | 0.0031 | ✅ |
 | 10 | 2Y MA Multiplier | 0.4264 | 7d | +0.0481 | 0.0059 | ✅ |
@@ -52,7 +52,7 @@ pada minimal satu lag window. Minimum 3 indikator terpilih.
 Sebanyak **10 indikator** memenuhi kriteria seleksi:
 
 
-### Trolololo (LogReg)
+### Logarithmic Regression
 
 - **Composite Score:** 0.6819
 - **Korelasi terkuat:** Spearman ρ = -0.4698 pada lag **90 hari** (p = 0.0000)
@@ -100,7 +100,7 @@ Sebanyak **10 indikator** memenuhi kriteria seleksi:
 - **Distribusi antar kondisi pasar:** Kruskal-Wallis H=2365.39, p=0.0000 (signifikan)
 
 
-### CBBI Confidence
+### Composite Index
 
 - **Composite Score:** 0.4419
 - **Korelasi terkuat:** Spearman ρ = -0.0700 pada lag **90 hari** (p = 0.0001)
